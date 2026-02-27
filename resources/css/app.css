@@ -27,3 +27,9 @@
     width: 100%;
     height: auto;
 }
+
+.filters {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
