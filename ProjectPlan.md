@@ -37,7 +37,11 @@ Eloquent-Coffee-Co is an admin interface for managing coffee products. The syste
     - Filter products by at least **two attributes** (e.g., intensity, origin). (In app/Http/Controllers)
     - Optional: filter by type or price range.
 
-4. **Frontend**
+4. **Admin**
+    - Create admin account in database. Hash password.
+    - Login/logout logics in app/Http/Controllers
+
+5. **Frontend**
     - Display list of products with:
         - Image
         - Name
@@ -52,7 +56,7 @@ Eloquent-Coffee-Co is an admin interface for managing coffee products. The syste
         - Avoid relying solely on color for meaning
         - Legible fonts that scale correctly
 
-5. **Seeded Data**
+6. **Seeded Data**
     - Use realistic coffee names, origins, and intensities.
     - One image per type.
 
