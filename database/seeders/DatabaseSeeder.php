@@ -16,21 +16,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        class DatabaseSeeder extends Seeder
-        {
-            public function run()
-            {
-                $this->call([
-                    OriginSeeder::class,
-                    RegionSeeder::class,
-                    SuffixSeeder::class,
-                    RoastSeeder::class,
-                    TypeSeeder::class,
-                ]);
+        $this->call([
+            OriginSeeder::class,
+            RegionSeeder::class,
+            SuffixSeeder::class,
+            RoastSeeder::class,
+            TypeSeeder::class,
+        ]);
 
-                Product::factory()->count(100)->create();
-            }
-        }
+        Product::factory()->count(100)->create();
 
 
         User::factory()->create([

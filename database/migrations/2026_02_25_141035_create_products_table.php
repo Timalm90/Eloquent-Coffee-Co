@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreign('region_id')->references('id')->on('regions');
 
             $table->unsignedBigInteger('suffix_id');
-            $table->foreign('suffix_id')->references('id')->on('suffix');
+            $table->foreign('suffix_id')->references('id')->on('suffixes');
 
             $table->unsignedBigInteger('roast_id');
             $table->foreign('roast_id')->references('id')->on('roasts');

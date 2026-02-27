@@ -13,7 +13,7 @@ class SuffixSeeder extends Seeder
      */
     public function run(): void
     {
-        $suffixes = ['Reserve', 'Classic', 'Signature', 'Estate', 'Selection', 'Heritage', 'Estate', 'Prime', 'Gold', 'Limited'];
+        $suffixes = ['Reserve', 'Classic', 'Signature', 'Estate', 'Selection', 'Heritage', 'Prime', 'Gold', 'Limited'];
 
         foreach ($suffixes as $suffix) {
             Suffix::create(['suffix' => $suffix]);

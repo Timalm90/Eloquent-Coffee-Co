@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Suffix;
+use App\Models\Type;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +16,7 @@ class TypeSeeder extends Seeder
         $types = ['Whole bean', 'Capsules', 'Ground'];
 
         foreach ($types as $type) {
-            Suffix::create(['type' => $type]);
+            Type::create(['type' => $type]);
         }
     }
 }

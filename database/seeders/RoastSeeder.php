@@ -16,7 +16,7 @@ class RoastSeeder extends Seeder
         $roasts = ['Light Roast', 'Medium Roast', 'Dark Roast', 'Espresso Roast'];
 
         foreach ($roasts as $roast) {
-            Roast::create(['type' => $roast]);
+            Roast::create(['roast' => $roast]);
         }
     }
 }
