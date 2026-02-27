@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('regions', function (Blueprint $table) {
+        Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->string('region')->unique();
-
-            // Forein key to origins
-            $table->unsignedBigInteger('country_id');
-            $table->foreign('country_id')->references('id')->on('origins');
-
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('regions');
+        Schema::dropIfExists('types');
     }
 };

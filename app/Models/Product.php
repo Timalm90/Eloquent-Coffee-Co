@@ -23,4 +23,8 @@ class Product extends Model
     {
         return $this->belongsTo(Roast::class);
     }
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
 }

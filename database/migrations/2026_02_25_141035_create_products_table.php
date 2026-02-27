@@ -27,6 +27,9 @@ return new class extends Migration
             $table->unsignedBigInteger('roast_id');
             $table->foreign('roast_id')->references('id')->on('roasts');
 
+            $table->unsignedBigInteger('type_id');
+            $table->foreign('type_id')->references('id')->on('types');
+
             $table->boolean('in_stock')->default(true);
             $table->timestamps();
         });
