@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             ['email' => 'admin@eloquentcoffee.co'],
             [
                 'name' => 'admin',
-                'password' => Hash::make('coffebean')
+                'password' => Hash::make('coffeebean')
             ]
         );
     }
