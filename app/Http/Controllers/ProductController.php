@@ -18,6 +18,10 @@ class ProductController extends Controller
         if ($request->filled('type')) $query->where('type_id', $request->type);
         if ($request->filled('country')) $query->where('country_id', $request->country);
 
+        $inStock = $request->input('in_stock', '1');
+        if ($inStock !== 'all') {
+            $query->where('in_stock', (int) $inStock);
+        }
         $products = $query->paginate(12)->withQueryString();
 
         $roasts = Roast::all();

@@ -49,9 +49,22 @@
                 @endforeach
             </select>
 
+            {{-- In Stock Toggle --}}
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-600">Toggle out of stock</span>
+                <div
+                    @click="filters.in_stock = filters.in_stock == '1' ? 'all' : '1'; updateFilters()"
+                    :class="filters.in_stock == 'all' ? 'bg-red-900' : 'bg-green-300'"
+                    class="relative w-11 h-6 rounded-full cursor-pointer transition-colors duration-200">
+                    <div
+                        :class="filters.in_stock == 'all' ? 'translate-x-5' : 'translate-x-1'"
+                        class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200">
+                    </div>
+                </div>
+            </div>
+
             <button @click="clearFilters()" class="bg-red-500 text-white px-3 py-2 rounded">Clear Filters</button>
         </div>
-
 
         {{-- Products Grid --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -90,6 +103,7 @@
                     roast: '{{ request("roast") }}',
                     type: '{{ request("type") }}',
                     country: '{{ request("country") }}',
+                    in_stock: '{{ request("in_stock", "1") }}',
                 },
                 updateFilters() {
                     const params = new URLSearchParams(this.filters);
@@ -99,7 +113,8 @@
                     this.filters = {
                         roast: '',
                         type: '',
-                        country: ''
+                        country: '',
+                        in_stock: '1'
                     };
                     window.location.href = '/';
                 }
