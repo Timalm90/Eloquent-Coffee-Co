@@ -6,7 +6,7 @@
 <body>
     <h1>Test Products</h1>
 
-    <ul>
+    <ol>
         @foreach ($products as $product)
             <li>
                 <strong>{{ $product->name }}</strong><br>
@@ -19,7 +19,7 @@
             </li>
             <hr>
         @endforeach
-    </ul>
+    </ol>
 
 </body>
 </html>

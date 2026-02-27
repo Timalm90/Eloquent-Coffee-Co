@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             SuffixSeeder::class,
             RoastSeeder::class,
             TypeSeeder::class,
+            UserSeeder::class
         ]);
 
         $faker = Faker::create();
@@ -73,10 +74,5 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('Created ' . count($generated) . " products after {$attempts} attempts.");
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
     }
 }
