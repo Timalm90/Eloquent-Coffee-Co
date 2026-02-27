@@ -11,6 +11,12 @@
 </head>
 
 <body class="bg-gray-50 p-6">
+       <nav>
+       <a href=" {{ route('login') }}" class="text-blue-500 hover:underline">Login</a>
+
+
+       {{-- <a href=" {{ route('dashboard') }}" class="text-blue-500 hover:underline">Dashboard</a> --}}
+   </nav>
 
     <div class="max-w-7xl mx-auto">
 
