@@ -54,7 +54,8 @@ Eloquent-Coffee-Co is an admin interface for managing coffee products. The syste
 
 5. **Seeded Data**
    - Use realistic coffee names, origins, and intensities.
-   - One image per type.
+   - One image per type (Or use an Array of suffixes ie. 01.png, 02.png etc)
+
 
 ---
 
