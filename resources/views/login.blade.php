@@ -28,6 +28,6 @@
 </form>
 
 
-@include('errors')
+@include('components/errors')
 </body>
 </html>
