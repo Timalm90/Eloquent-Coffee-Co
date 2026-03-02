@@ -12,6 +12,10 @@
         "Noto Color Emoji";
 }
 
+body {
+    margin-top: 3rem;
+}
+
 .navbar {
     position: fixed;
     top: 0;

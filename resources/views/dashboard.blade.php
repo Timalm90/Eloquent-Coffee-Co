@@ -5,11 +5,14 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>Admin - Eloquent Coffee Co</title>
+   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-   This is the dashboard. You are logged in!
-
-
+    <x-header /> 
+   <p>This is the dashboard. You are logged in!</p>
+   <p>This is the dashboard. You are logged in!</p>
+   <p>This is the dashboard. You are logged in!</p>
+   <p>This is the dashboard. You are logged in!</p>
    <a href="/logout">Logout</a>
 </body>
 </html>
