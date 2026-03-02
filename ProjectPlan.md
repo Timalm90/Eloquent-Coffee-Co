@@ -38,8 +38,8 @@ Eloquent-Coffee-Co is an admin interface for managing coffee products. The syste
     - Optional: filter by type or price range.
 
 4. **Admin**
-    - Create admin account in database. Hash password.
-    - Login/logout logics in app/Http/Controllers
+    - Create admin account in database. Hash password. - CHECK!
+    - Login/logout logics in app/Http/Controllers - CHECK!
 
 5. **Frontend**
     - Display list of products with:

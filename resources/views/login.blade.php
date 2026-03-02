@@ -10,23 +10,14 @@
 <body>
     <x-header /> 
    <h1>Login</h1>
-   <form method="post" action="/login">
-   @csrf
 
-
-   <div>
-       <label for="username">Username</label>
-       <input name="username" id="username" type="text" />
-   </div>
-   <div>
-       <label for="password">Password</label>
-       <input name="password" id="password" type="password" required />
-   </div>
-   <button type="submit">Login</button>
-
-
-</form>
-
+    <x-form action="/login" class="max-w-sm">
+        <x-input name="username" label="Username" />
+        <x-input name="password" label="Password" type="password" />
+        <x-button type="submit">
+            Login
+        </x-button>
+    </x-form>
 
 @include('components/errors')
 </body>
