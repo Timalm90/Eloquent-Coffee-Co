@@ -16,33 +16,46 @@ class Product extends Model
         'suffix_id',
         'roast_id',
         'type_id',
-        'in_stock'
+        'inventory',
+        'price',
     ];
 
     protected $casts = [
         'in_stock' => 'boolean',
     ];
 
+    protected static function booted()
+    {
+        static::saving(function ($product) {
+            $product->in_stock = $product->inventory > 0;
+        });
+    }
+
     public function origin()
     {
         return $this->belongsTo(Origin::class, 'country_id');
     }
+
     public function region()
     {
         return $this->belongsTo(Region::class);
     }
+
     public function suffix()
     {
         return $this->belongsTo(Suffix::class);
     }
+
     public function roast()
     {
         return $this->belongsTo(Roast::class);
     }
+
     public function type()
     {
         return $this->belongsTo(Type::class);
     }
+
     protected $appends = ['image_url'];
 
     public function getImageUrlAttribute()

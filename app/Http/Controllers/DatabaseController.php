@@ -12,50 +12,42 @@ use Illuminate\Http\Request;
 
 class DatabaseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::with(['origin', 'region', 'roast', 'type']);
 
-        // Search by name
+        // Filter by name
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Filter on origin
-        if ($request->filled('origin')) {
-            $query->where('origin', $request->origin);
+        // Filter by country
+        if ($request->filled('country')) {
+            $query->where('country_id', $request->country);
         }
 
-        // Filter on region
+        // Filter by region
         if ($request->filled('region')) {
-            $query->where('region', $request->region);
+            $query->where('region_id', $request->region);
         }
 
-        // Filter on type
+        // Filter by type
         if ($request->filled('type')) {
-            $query->where('type', $request->type);
+            $query->where('type_id', $request->type);
         }
 
-        // Pagination: 20 products per page
         $products = $query->paginate(20)->withQueryString();
 
-        return view('dashboard.products.index', compact('products'));
+        return view('dashboard', [
+            'products' => $products,
+            'countries' => Origin::all(),
+            'regions' => Region::all(),
+            'suffixes' => Suffix::all(),
+            'roasts' => Roast::all(),
+            'types' => Type::all(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -65,60 +57,34 @@ class DatabaseController extends Controller
             'suffix_id' => 'required|exists:suffixes,id',
             'roast_id' => 'required|exists:roasts,id',
             'type_id' => 'required|exists:types,id',
-            'inventory' => 'nullable|integer|min:0',
+            'inventory' => 'required|integer|min:0',
+            'price' => 'required|integer|min:0',
         ]);
 
-        $product = new Product();
-        $product->name = $data['name'];
-        $product->country_id = $data['country_id'];
-        $product->region_id = $data['region_id'];
-        $product->suffix_id = $data['suffix_id'];
-        $product->roast_id = $data['roast_id'];
-        $product->type_id = $data['type_id'];
-        $product->inventory = $data['inventory'] ?? 0;
-        $product->save();
+        Product::create($data);
 
-        return redirect('/products');
+        return redirect()->route('dashboard.index')
+            ->with('success', 'Product created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        return view('products.show', ['product' => $product]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * Only updates inventory
-     */
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'inventory' => 'required|integer',
+            'inventory' => 'required|integer|min:0',
+            'price' => 'required|integer|min:0',
         ]);
 
-        $product->inventory = $product->inventory + $data['inventory'];
-        $product->save();
+        $product->update($data);
 
-        return redirect()->back()->with('success', 'Inventory updated successfully.');
+        return redirect()->back()
+            ->with('success', 'Product updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect("/dashboard");
+
+        return redirect()->back()
+            ->with('success', 'Product deleted successfully.');
     }
 }

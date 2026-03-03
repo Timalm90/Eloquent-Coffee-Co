@@ -22,3 +22,7 @@ Route::view('/login', 'login')->name('login')->middleware('guest');
 Route::post('/login', LoginController::class);
 Route::get('dashboard', DashboardController::class)->middleware('auth');
 Route::get("/logout", LogoutController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('dashboard', DatabaseController::class)
+        ->names('dashboard');
+});

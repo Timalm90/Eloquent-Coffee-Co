@@ -30,9 +30,10 @@ return new class extends Migration
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('types');
 
-            // $table->boolean('in_stock')->default(true);
-            $table->integer('inventory');
-            $table->integer('price');
+            $table->integer('inventory')->default(0);
+            $table->integer('price')->default(0);
+            $table->boolean('in_stock')->default(false);
+
             $table->timestamps();
         });
     }
