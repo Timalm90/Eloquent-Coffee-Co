@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Origin;
+use App\Models\Region;
+use App\Models\Suffix;
+use App\Models\Roast;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class DatabaseController extends Controller
@@ -28,24 +33,35 @@ class DatabaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $request->validate([]);
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:products,name',
+            'country_id' => 'required|exists:origins,id',
+            'region_id' => 'required|exists:regions,id',
+            'suffix_id' => 'required|exists:suffixes,id',
+            'roast_id' => 'required|exists:roasts,id',
+            'type_id' => 'required|exists:types,id',
+            'inventory' => 'nullable|integer|min:0',
+        ]);
+
         $product = new Product();
-        $product->country_id = $request->integer('country_id');
-        $product->origin_id = $request->integer('origin_id');
-        $product->suffix_id = $request->integer('suffix_id');
-        $product->roast_id = $request->integer('roast_id');
-        $product->type_id = $request->integer('type_id');
-        $product->inventory = $request->integer('inventory');
+        $product->name = $data['name'];
+        $product->country_id = $data['country_id'];
+        $product->region_id = $data['region_id'];
+        $product->suffix_id = $data['suffix_id'];
+        $product->roast_id = $data['roast_id'];
+        $product->type_id = $data['type_id'];
+        $product->inventory = $data['inventory'] ?? 0;
         $product->save();
+
+        return redirect('/products');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        //
+        return view('products.show', ['product' => $product]);
     }
 
     /**
@@ -58,15 +74,17 @@ class DatabaseController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * Only updates inventory
      */
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'inventory' => 'required|integer'
+            'inventory' => 'required|integer',
         ]);
-        $product->update([
-            'inventory' => $data['inventory']
-        ]);
+
+        $product->inventory = $product->inventory + $data['inventory'];
+        $product->save();
+
         return redirect()->back()->with('success', 'Inventory updated successfully.');
     }
 
@@ -75,7 +93,6 @@ class DatabaseController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
         $product->delete();
         return redirect("/dashboard");
     }
