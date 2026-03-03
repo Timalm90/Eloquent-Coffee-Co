@@ -69,7 +69,9 @@ class DatabaseSeeder extends Seeder
                 'suffix_id'  => $suffix->id,
                 'roast_id'   => $roasts->random()->id,
                 'type_id'    => $types->random()->id,
-                'in_stock'   => $faker->boolean(80),
+                'inventory' => $faker->numberBetween(0, 10),
+                'price' => $faker->numberBetween(10, 80),
+                // 'in_stock'   => $faker->boolean(80),
             ]);
         }
 
