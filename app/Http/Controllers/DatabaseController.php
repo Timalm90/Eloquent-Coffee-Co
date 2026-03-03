@@ -15,9 +15,34 @@ class DatabaseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Could we use this to display the products in index page and admin page?
+        $query = Product::query();
+
+        // Search by name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter on origin
+        if ($request->filled('origin')) {
+            $query->where('origin', $request->origin);
+        }
+
+        // Filter on region
+        if ($request->filled('region')) {
+            $query->where('region', $request->region);
+        }
+
+        // Filter on type
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Pagination: 20 products per page
+        $products = $query->paginate(20)->withQueryString();
+
+        return view('dashboard.products.index', compact('products'));
     }
 
     /**
