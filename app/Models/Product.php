@@ -18,6 +18,7 @@ class Product extends Model
         'type_id',
         'inventory',
         'price',
+        'in_stock',
     ];
 
     protected $casts = [
@@ -26,7 +27,13 @@ class Product extends Model
 
     protected static function booted()
     {
-        static::saving(function ($product) {
+        // When creating a new product
+        static::creating(function ($product) {
+            $product->in_stock = $product->inventory > 0;
+        });
+
+        // When updating an existing product
+        static::updating(function ($product) {
             $product->in_stock = $product->inventory > 0;
         });
     }

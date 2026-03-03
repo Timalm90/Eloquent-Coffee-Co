@@ -114,7 +114,7 @@
                      </td>
 
                      {{-- Update Modal --}}
-                     <div x-show="confirmUpdate" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                     <div x-cloak x-show="confirmUpdate" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                         <div class="bg-white p-6 rounded shadow">
                            <p>You are about to update this product. Confirm?</p>
                            <div class="flex gap-3 mt-4">
@@ -136,7 +136,7 @@
                      @csrf
                      @method('DELETE')
 
-                     <div x-show="confirmDelete"
+                     <div x-cloak x-show="confirmDelete"
                         class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                         <div class="bg-white p-6 rounded shadow">
                            <p>You are about to delete this product. Confirm?</p>

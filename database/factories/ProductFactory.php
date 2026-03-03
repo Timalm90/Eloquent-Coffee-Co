@@ -10,17 +10,10 @@ use App\Models\Type;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
- */
 class ProductFactory extends Factory
 {
     protected $model = Product::class;
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
     public function definition(): array
     {
         $origin = Origin::inRandomOrder()->first();
@@ -29,6 +22,11 @@ class ProductFactory extends Factory
         $roast = Roast::inRandomOrder()->first();
         $type = Type::inRandomOrder()->first();
 
+        // 80% chance of having inventory
+        $inventory = $this->faker->boolean(80)
+            ? $this->faker->numberBetween(1, 100)
+            : 0;
+
         return [
             'name' => "{$origin->country} {$region->region} {$suffix->suffix}",
             'country_id' => $origin->id,
@@ -36,7 +34,8 @@ class ProductFactory extends Factory
             'suffix_id' => $suffix->id,
             'roast_id' => $roast->id,
             'type_id' => $type->id,
-            'in_stock' => $this->faker->boolean(80),
+            'inventory' => $inventory,
+            'price' => $this->faker->numberBetween(10, 50),
         ];
     }
 }

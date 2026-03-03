@@ -62,6 +62,11 @@ class DatabaseSeeder extends Seeder
 
             $generated[] = $name;
 
+            // 80% chance of having inventory, 20% chance of being out of stock
+            $inventory = $faker->boolean(80)
+                ? $faker->numberBetween(1, 100)
+                : 0;
+
             Product::create([
                 'name'       => $name,
                 'country_id' => $origin->id,
@@ -69,9 +74,9 @@ class DatabaseSeeder extends Seeder
                 'suffix_id'  => $suffix->id,
                 'roast_id'   => $roasts->random()->id,
                 'type_id'    => $types->random()->id,
-                'inventory' => $faker->numberBetween(0, 10),
+                'inventory' => $inventory,
                 'price' => $faker->numberBetween(10, 80),
-                // 'in_stock'   => $faker->boolean(80),
+                'in_stock' => $inventory > 0,
             ]);
         }
 
