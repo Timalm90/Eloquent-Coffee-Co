@@ -142,48 +142,52 @@
       </div>
 
       {{-- ADD NEW PRODUCT --}}
-      <div class="mt-10 bg-white p-6 shadow rounded">
-         <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+      <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-3 gap-4">
+      @csrf
 
-         <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-3 gap-4">
-            @csrf
+    <input name="name" placeholder="Name" class="border rounded p-2">
 
-            <input name="name" placeholder="Name" class="border rounded p-2">
+    {{-- COUNTRY --}}
+      <select name="country_id" id="countrySelect" class="border rounded p-2">
+         <option value="">-- Select country --</option>
+         @foreach($countries as $country)
+            <option value="{{ $country->id }}">{{ $country->country }}</option>
+         @endforeach
+      </select>
 
-            <select name="country_id" class="border rounded p-2">
-               @foreach($countries as $country)
-               <option value="{{ $country->id }}">{{ $country->country }}</option>
-               @endforeach
-            </select>
+    {{-- REGION --}}
+      <select name="region_id" id="regionSelect" class="border rounded p-2" disabled>
+         <option value="">-- Select country first --</option>
+      </select>
 
-            <select name="region_id" class="border rounded p-2">
-               @foreach($regions as $region)
-               <option value="{{ $region->id }}">{{ $region->region }}</option>
-               @endforeach
-            </select>
+    {{-- ROAST --}}
+      <select name="roast_id" class="border rounded p-2">
+         <option value="">-- Choose roast --</option>
+         @foreach($roasts as $roast)
+            <option value="{{ $roast->id }}">{{ $roast->roast }}</option>
+         @endforeach
+      </select>
 
-            <select name="roast_id" class="border rounded p-2">
-               @foreach($roasts as $roast)
-               <option value="{{ $roast->id }}">{{ $roast->roast }}</option>
-               @endforeach
-            </select>
+    {{-- TYPE --}}
+      <select name="type_id" class="border rounded p-2">
+         <option value="">-- Choose type --</option>
+         @foreach($types as $type)
+            <option value="{{ $type->id }}">{{ $type->type }}</option>
+         @endforeach
+      </select>
 
-            <select name="type_id" class="border rounded p-2">
-               @foreach($types as $type)
-               <option value="{{ $type->id }}">{{ $type->type }}</option>
-               @endforeach
-            </select>
+      <input name="price" type="number" step="0.01" placeholder="0" class="border rounded p-2">
+      <input name="inventory" type="number" placeholder="0" class="border rounded p-2">
 
-            <input name="price" type="number" step="0.01" placeholder="Price" class="border rounded p-2">
-            <input name="inventory" type="number" placeholder="Inventory" class="border rounded p-2">
-
-            <button class="bg-green-600 text-white px-4 py-2 rounded col-span-3">
-               Add Product
-            </button>
-         </form>
-      </div>
+      <button class="bg-green-600 text-white px-4 py-2 rounded col-span-3">
+         Add Product
+      </button>
+   </form>
 
    </div>
+
+   @vite('resources/js/addProduct.js')
+
 </body>
 
 </html>

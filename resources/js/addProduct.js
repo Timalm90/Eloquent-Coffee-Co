@@ -1,0 +1,35 @@
+const countrySelect = document.getElementById("countrySelect");
+const regionSelect = document.getElementById("regionSelect");
+
+countrySelect.addEventListener("change", function () {
+    const countryId = this.value;
+
+    // Remove option
+    while (regionSelect.firstChild) {
+        regionSelect.removeChild(regionSelect.firstChild);
+    }
+
+    // Add default option
+    regionSelect.appendChild(new Option("-- Select country first --", ""));
+    regionSelect.disabled = true;
+
+    if (!countryId) return;
+
+    fetch(`/regions-by-country/${countryId}`)
+        .then((response) => response.json())
+        .then((regions) => {
+            // Remove option and add new
+            while (regionSelect.firstChild) {
+                regionSelect.removeChild(regionSelect.firstChild);
+            }
+
+            regionSelect.appendChild(new Option("-- Select region --", ""));
+
+            regions.forEach((region) => {
+                const opt = new Option(region.region, region.id);
+                regionSelect.appendChild(opt);
+            });
+
+            regionSelect.disabled = false;
+        });
+});

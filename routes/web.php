@@ -43,4 +43,7 @@ Route::middleware(['auth'])->group(function () {
     // Delete product
     Route::delete('/dashboard/{product}', [DatabaseController::class, 'destroy'])
         ->name('dashboard.destroy');
+
+    // Add products - get regions for each country
+    Route::get('/regions-by-country/{country}', [DatabaseController::class, 'regionsByCountry']);
 });

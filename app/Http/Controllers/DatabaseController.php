@@ -90,7 +90,7 @@ class DatabaseController extends Controller
             'name' => 'required|string|max:255|unique:products,name',
             'country_id' => 'required|exists:origins,id',
             'region_id' => 'required|exists:regions,id',
-            'suffix_id' => 'required|exists:suffixes,id',
+            // 'suffix_id' => 'required|exists:suffixes,id',
             'roast_id' => 'required|exists:roasts,id',
             'type_id' => 'required|exists:types,id',
             'inventory' => 'nullable|integer|min:0',
@@ -158,5 +158,12 @@ class DatabaseController extends Controller
 
         return redirect()->route('dashboard.index')
             ->with('success', 'Product deleted successfully.');
+    }
+
+
+    // TEST ADD PRODUCTS
+    public function regionsByCountry($countryId)
+    {
+        return Region::where('country_id', $countryId)->get();
     }
 }
