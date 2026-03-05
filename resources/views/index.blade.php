@@ -17,6 +17,14 @@
 
         <h1 class="text-3xl font-bold mb-6">Products</h1>
 
+        <form method="GET" class="mb-6 flex gap-3 items-center">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Type here to search..." class="border rounded px-3 py-2 w-64" />
+
+            <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">
+                Search
+            </button>
+        </form>
+
         <div
             x-data="filterComponentCustomer({
                 roast: '{{ request('roast') }}',

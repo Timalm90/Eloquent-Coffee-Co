@@ -14,6 +14,11 @@ class ProductController extends Controller
     {
         $query = Product::with(['origin', 'region', 'roast', 'type']);
 
+        // TEST!!
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
         if ($request->filled('roast')) $query->where('roast_id', $request->roast);
         if ($request->filled('type')) $query->where('type_id', $request->type);
         if ($request->filled('country')) $query->where('country_id', $request->country);
