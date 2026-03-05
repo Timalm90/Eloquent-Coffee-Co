@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\CountryController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DatabaseController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\RegionController;
+use App\Http\Controllers\RoastController;
+use App\Http\Controllers\TypeController;
 
 // Public pages
 Route::get('/', [ProductController::class, 'index']);
@@ -46,4 +50,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Add products - get regions for each country
     Route::get('/regions-by-country/{country}', [DatabaseController::class, 'regionsByCountry']);
+
+    // Add items in each category in database
+    Route::post('/countries', [CountryController::class, 'store'])->name('countries.store');
+    Route::post('/regions', [RegionController::class, 'store'])->name('regions.store');
+    Route::post('/roasts', [RoastController::class, 'store'])->name('roasts.store');
+    Route::post('/types', [TypeController::class, 'store'])->name('types.store');
 });

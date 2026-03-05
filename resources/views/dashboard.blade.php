@@ -13,24 +13,29 @@
    <x-header />
 
    <div class="max-w-7xl mx-auto p-6">
+      <div x-data="{ openAddModal: false }">
 
       <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
+      <button @click="openAddModal = true" class="bg-green-600 text-white px-4 py-2 rounded">
+         Add Product
+      </button>
 
       {{-- FILTER --}}
       {{-- Search function --}}
       <form method="GET" class="mb-6 flex gap-3 items-center">
-   <input
-      type="text"
-      name="search"
-      value="{{ request('search') }}"
-      placeholder="Type here to search..."
-      class="border rounded px-3 py-2 w-64"
-   />
+         <input
+         type="text"
+         name="search"
+         value="{{ request('search') }}"
+         placeholder="Type here to search..."
+         class="border rounded px-3 py-2 w-64"
+      />
 
-   <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">
-      Search
-   </button>
-</form>
+      <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">
+         Search
+         </button>
+      </form>
 
       <div x-data="filterComponentDashboard({
          roast: '{{ request('roast') }}',
@@ -153,6 +158,13 @@
          </table>
       </div>
 
+      <div 
+   x-cloak 
+   x-show="openAddModal"
+   class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+
+   <div class="bg-white p-6 rounded shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto">
+      <h2>Add product</h2>
       {{-- ADD NEW PRODUCT --}}
       <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-3 gap-4">
       @csrf
@@ -196,6 +208,76 @@
       </button>
    </form>
 
+   <h2>Add more...</h2>
+   <div x-data="{ category: '' }">
+
+   <label class="block font-semibold mb-1">Add more…</label>
+
+   <select x-model="category" class="border rounded p-2 w-full mb-4">
+      <option value="">-- Choose category --</option>
+      <option value="country">Country</option>
+      <option value="region">Region</option>
+      <option value="roast">Roast</option>
+      <option value="type">Type</option>
+   </select>
+
+   {{-- Country --}}
+   <div x-show="category === 'country'">
+   <form method="POST" action="{{ route('countries.store') }}">
+      @csrf
+      <input name="country" placeholder="Country name" class="border rounded p-2 w-full mb-3">
+      <button class="bg-green-600 text-white px-4 py-2 rounded w-full">Save</button>
+   </form>
+</div>
+
+{{-- Region --}}
+<div x-show="category === 'region'">
+   <form method="POST" action="{{ route('regions.store') }}">
+      @csrf
+
+      <select name="country_id" class="border rounded p-2 w-full mb-3">
+         <option value="">-- Select country --</option>
+         @foreach($countries as $country)
+            <option value="{{ $country->id }}">{{ $country->country }}</option>
+         @endforeach
+      </select>
+
+      <input name="region" placeholder="Region name" class="border rounded p-2 w-full mb-3">
+
+      <button class="bg-green-600 text-white px-4 py-2 rounded w-full">Save</button>
+   </form>
+</div>
+
+{{-- Roast --}}
+<div x-show="category === 'roast'">
+   <form method="POST" action="{{ route('roasts.store') }}">
+      @csrf
+      <input name="roast" placeholder="Roast name" class="border rounded p-2 w-full mb-3">
+      <button class="bg-green-600 text-white px-4 py-2 rounded w-full">Save</button>
+   </form>
+</div>
+
+{{-- Type --}}
+<div x-show="category === 'type'">
+   <form method="POST" action="{{ route('types.store') }}">
+      @csrf
+      <input name="type" placeholder="Type name" class="border rounded p-2 w-full mb-3">
+      <button class="bg-green-600 text-white px-4 py-2 rounded w-full">Save</button>
+   </form>
+</div>
+
+
+
+         <button 
+         @click="openAddModal = false"
+         class="mt-4 bg-gray-400 text-white px-4 py-2 rounded w-full">
+         Close
+      </button>
+
+   </div>
+</div>
+
+</div>
    </div>
 
    <div class="mt-6">
