@@ -20,7 +20,7 @@
         class="mb-4 p-3 rounded bg-green-100 text-green-800 border border-green-300"
     >
         <div class="flex justify-between items-center">
-            <span>{{ session('success') }}</span>
+            <span><strong>Success!</strong> {{ session('success') }}</span>
             <button @click="show = false" class="text-green-900 font-bold">×</button>
         </div>
     </div>
@@ -34,7 +34,7 @@
         class="mb-4 p-3 rounded bg-red-100 text-red-800 border border-red-300"
     >
         <div class="flex justify-between items-center">
-            <span>{{ $errors->first() }}</span>
+            <span><strong>Error!</strong> {{ $errors->first() }}</span>
             <button @click="show = false" class="text-red-900 font-bold">×</button>
         </div>
     </div>
