@@ -3,10 +3,13 @@
 'roasts',
 'types',
 'countries',
+'mode' => 'customer' //default
 ])
 
 <div
-    x-data="filterComponent(@js($filters))"
+    x-data="(mode === 'dashboard' 
+    ? filterComponentDashboard(@js($filters) 
+    : filterComponentCustomer(@js($filters)))"
     class="flex flex-wrap gap-4 mb-6 items-center">
 
     {{-- Roast --}}

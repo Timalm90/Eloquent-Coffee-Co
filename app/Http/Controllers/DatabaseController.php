@@ -30,18 +30,28 @@ class DatabaseController extends Controller
         }
 
         // Alternative origin filter
-        if ($request->filled('origin')) {
-            $query->where('country_id', $request->origin);
-        }
+        // if ($request->filled('origin')) {
+        //     $query->where('country_id', $request->origin);
+        // }
 
         // Filter by region
         if ($request->filled('region')) {
             $query->where('region_id', $request->region);
         }
 
+        // Filter by roast
+        if ($request->filled('roast')) {
+            $query->where('roast_id', $request->roast);
+        }
+
         // Filter by type
         if ($request->filled('type')) {
             $query->where('type_id', $request->type);
+        }
+
+        // Filter by in stock
+        if ($request->filled('in_stock') && $request->in_stock == '1') {
+            $query->where('inventory', '>', 0);
         }
 
         // Pagination: 20 products per page

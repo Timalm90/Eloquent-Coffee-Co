@@ -1,7 +1,9 @@
-import Alpine from 'alpinejs'
-import filterComponent from './filters'
+import Alpine from "alpinejs";
+import filterComponentCustomer from "./filterComponentCustomer.js";
+import filterComponentDashboard from "./filterComponentDashboard.js";
 
-window.Alpine = Alpine
+window.filterComponentCustomer = filterComponentCustomer;
+window.filterComponentDashboard = filterComponentDashboard;
 
-Alpine.data('filterComponent', filterComponent)
-Alpine.start()
+window.Alpine = Alpine;
+Alpine.start();

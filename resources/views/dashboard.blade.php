@@ -18,7 +18,7 @@
 
       {{-- FILTER --}}
       <div
-         x-data="filterComponent({
+         x-data="filterComponentDashboard({
                 roast: '{{ request('roast') }}',
                 type: '{{ request('type') }}',
                 country: '{{ request('country') }}',
@@ -34,7 +34,9 @@
                 ]"
             :roasts="$roasts"
             :types="$types"
-            :countries="$countries" />
+            :countries="$countries"
+            mode="dashboard"
+         />
 
       </div>
 

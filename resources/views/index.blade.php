@@ -18,7 +18,7 @@
         <h1 class="text-3xl font-bold mb-6">Products</h1>
 
         <div
-            x-data="filterComponent({
+            x-data="filterComponentCustomer({
                 roast: '{{ request('roast') }}',
                 type: '{{ request('type') }}',
                 country: '{{ request('country') }}',
@@ -34,7 +34,9 @@
                 ]"
                 :roasts="$roasts"
                 :types="$types"
-                :countries="$countries" />
+                :countries="$countries" 
+                mode="customer"
+                />
 
         </div>
 
