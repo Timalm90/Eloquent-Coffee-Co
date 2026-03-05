@@ -1,6 +1,7 @@
 
 <nav class="navbar">
-    <div><a href="/" class="text-blue-500 hover:underline">HOME</a></div>
+    {{-- <div><a href="/"><img src="/images/Frame3.png" alt="Logo" class="logoNav"/></a></div> --}}
+    <div><a href="/">Home</a></div>
     <div class="navLinks">
         <a href="/dashboard" class="text-blue-500 hover:underline">Dashboard</a>
         @guest

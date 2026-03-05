@@ -57,12 +57,7 @@
 
             <tbody>
                @foreach($products as $product)
-               <tr x-data="{ editing: false, confirmDelete: false, confirmUpdate: false }"
-                  class="border-t">
-
-                  <form method="POST" action="{{ route('dashboard.update', $product) }}">
-                     @csrf
-                     @method('PUT')
+               <tr x-data="{ confirmDelete: false }" class="border-t">
 
                      <td class="p-3">{{ $product->name }}</td>
                      <td class="p-3">{{ $product->origin->country }}</td>
@@ -70,90 +65,73 @@
                      <td class="p-3">{{ $product->roast->roast }}</td>
                      <td class="p-3">{{ $product->type->type }}</td>
 
-                     {{-- Price --}}
-                     <td class="p-3">
-                        <input x-bind:readonly="!editing"
-                           name="price"
-                           type="number"
-                           step="0.01"
-                           value="{{ $product->price }}"
-                           class="border rounded px-2 py-1 w-24">
-                     </td>
+                  {{-- PRICE-FORM --}}
+                  <td class="p-3">
+                     <form method="POST" action="{{ route('dashboard.updatePrice', $product) }}" class="flex gap-2">
+                        @csrf
+                        @method('PUT')
 
-                     {{-- Inventory --}}
-                     <td class="p-3">
-                        <input x-bind:readonly="!editing"
-                           name="inventory"
-                           type="number"
-                           value="{{ $product->inventory }}"
-                           class="border rounded px-2 py-1 w-20">
-                     </td>
+                        <input type="number"
+                               step="0.01"
+                               name="price"
+                               value="{{ $product->price }}"
+                               class="border rounded px-2 py-1 w-24">
 
-                     <td class="p-3 flex gap-2">
-
-                        <button type="button"
-                           @click="editing = true"
-                           x-show="!editing"
-                           class="bg-blue-500 text-white px-3 py-1 rounded">
-                           Update
-                        </button>
-
-                        <button type="button"
-                           @click="confirmUpdate = true"
-                           x-show="editing"
-                           class="bg-green-600 text-white px-3 py-1 rounded">
+                        <button class="bg-blue-500 text-white px-3 py-1 rounded">
                            Save
                         </button>
+                     </form>
+                  </td>
 
-                        <button type="button"
-                           @click="confirmDelete = true"
-                           class="bg-red-500 text-white px-3 py-1 rounded">
-                           Delete
+                                    {{-- INVENTORY READ-ONLY --}}
+                  <td class="p-3 font-semibold">
+                     {{ $product->inventory }}
+                  </td>
+
+                                    {{-- INCOMING STOCK --}}
+                  <td class="p-3">
+                     <form method="POST" action="{{ route('dashboard.addInventory', $product) }}" class="flex gap-2">
+                        @csrf
+
+                        <input type="number"
+                               name="incoming"
+                               placeholder="0"
+                               class="border rounded px-2 py-1 w-20">
+
+                        <button class="bg-green-600 text-white px-3 py-1 rounded">
+                           Add
                         </button>
+                     </form>
 
-                     </td>
-
-                     {{-- Update Modal --}}
-                     <div x-cloak x-show="confirmUpdate" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                        <div class="bg-white p-6 rounded shadow">
-                           <p>You are about to update this product. Confirm?</p>
-                           <div class="flex gap-3 mt-4">
-                              <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">
-                                 Confirm
-                              </button>
-                              <button type="button" @click="confirmUpdate = false"
-                                 class="bg-gray-400 px-4 py-2 rounded">
-                                 Cancel
-                              </button>
-                           </div>
-                        </div>
-                     </div>
-
-                  </form>
-
-                  {{-- Delete Form --}}
-                  <form method="POST" action="{{ route('dashboard.destroy', $product) }}">
-                     @csrf
-                     @method('DELETE')
+                     <button @click="confirmDelete = true"
+                             class="bg-red-500 text-white px-3 py-1 rounded">
+                        Delete
+                     </button>
 
                      <div x-cloak x-show="confirmDelete"
                         class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
                         <div class="bg-white p-6 rounded shadow">
                            <p>You are about to delete this product. Confirm?</p>
                            <div class="flex gap-3 mt-4">
-                              <button type="submit"
-                                 class="bg-red-600 text-white px-4 py-2 rounded">
-                                 Delete
-                              </button>
+
+                              <form method="POST" action="{{ route('dashboard.destroy', $product) }}">
+                                 @csrf
+                                 @method('DELETE')
+                                 <button class="bg-red-600 text-white px-4 py-2 rounded">
+                                    Delete
+                                 </button>
+                              </form>
+
                               <button type="button"
                                  @click="confirmDelete = false"
                                  class="bg-gray-400 px-4 py-2 rounded">
                                  Cancel
                               </button>
+
                            </div>
                         </div>
                      </div>
-                  </form>
+                  </td>
 
                </tr>
                @endforeach

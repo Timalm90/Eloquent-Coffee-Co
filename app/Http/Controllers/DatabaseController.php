@@ -120,41 +120,28 @@ class DatabaseController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $product)
+    public function updatePrice(Request $request, Product $product)
     {
-        $data = $request->validate([
-            'inventory' => 'nullable|integer',
-            'price' => 'nullable|integer|min:0',
-        ]);
+        $data = $request->validate(
+            [
+                'price' => 'required|numeric|min:0'
+            ]
+        );
 
-        // Build updates array
-        $updates = [];
+        $product->update(['price' => $data['price']]);
 
-        // Update inventory (additive - adds to existing)
-        if (isset($data['inventory'])) {
-            $updates['inventory'] = $product->inventory + $data['inventory'];
-        }
-
-        // Update price (absolute - replaces existing)
-        if (isset($data['price'])) {
-            $updates['price'] = $data['price'];
-        }
-
-        // Use update() to trigger model events
-        if (!empty($updates)) {
-            $product->update($updates);
-        }
-
-        return redirect()->back()
-            ->with('success', 'Product updated successfully.');
+        return back()->with('success', 'Price updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function addInventory(Request $request, Product $product)
+    {
+        $data = $request->validate(['incoming' => 'required|integer|min:1']);
+
+        $product->update(['inventory' => $product->inventory + $data['incoming']]);
+
+        return back()->with('success', 'Inventory updated.');
+    }
+
     public function destroy(Product $product)
     {
         $product->delete();
