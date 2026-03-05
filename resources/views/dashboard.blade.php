@@ -198,6 +198,10 @@
 
    </div>
 
+   <div class="mt-6">
+      {{ $products->links() }}
+   </div>
+
    @vite('resources/js/addProduct.js')
 
 </body>
