@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Type;
 
 class Product extends Model
 {
@@ -19,6 +20,7 @@ class Product extends Model
         'inventory',
         'price',
         'in_stock',
+        'image',
     ];
 
     protected $casts = [
@@ -27,12 +29,26 @@ class Product extends Model
 
     protected static function booted()
     {
-        // When creating a new product
         static::creating(function ($product) {
             $product->in_stock = $product->inventory > 0;
+
+            // Assign a random image once, using type_id
+            if (!$product->image && $product->type_id) {
+                $type = Type::find($product->type_id);
+                if ($type) {
+                    $typeName = strtolower(str_replace(' ', '_', $type->type));
+                    $path = public_path("images/$typeName");
+                    $files = glob($path . '/*.png');
+
+                    if ($files) {
+                        $product->image = str_replace(public_path(), '', $files[array_rand($files)]);
+                    } else {
+                        $product->image = '/images/default.png';
+                    }
+                }
+            }
         });
 
-        // When updating an existing product
         static::updating(function ($product) {
             $product->in_stock = $product->inventory > 0;
         });
@@ -67,22 +83,6 @@ class Product extends Model
 
     public function getImageUrlAttribute()
     {
-        if (!$this->type) {
-            return '/images/default.png';
-        }
-
-        $typeName = strtolower(str_replace(' ', '_', $this->type->type));
-
-        $path = public_path("images/$typeName");
-
-        $files = glob($path . '/*.png');
-
-        if (!$files) {
-            return '/images/default.png';
-        }
-
-        $file = $files[array_rand($files)];
-
-        return str_replace(public_path(), '', $file);
+        return $this->image ?? '/images/default.png';
     }
 }
