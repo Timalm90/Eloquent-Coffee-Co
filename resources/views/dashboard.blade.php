@@ -17,27 +17,39 @@
       <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
       {{-- FILTER --}}
-      <div
-         x-data="filterComponentDashboard({
-                roast: '{{ request('roast') }}',
-                type: '{{ request('type') }}',
-                country: '{{ request('country') }}',
-                in_stock: '{{ request('in_stock', '1') }}'
-            })">
+      {{-- Search function --}}
+      <form method="GET" class="mb-6 flex gap-3 items-center">
+   <input
+      type="text"
+      name="search"
+      value="{{ request('search') }}"
+      placeholder="Type here to search..."
+      class="border rounded px-3 py-2 w-64"
+   />
 
-         <x-product.filters
-            :filters="[
-                    'roast' => request('roast'),
-                    'type' => request('type'),
-                    'country' => request('country'),
-                    'in_stock' => request('in_stock', '1')
-                ]"
+   <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">
+      Search
+   </button>
+</form>
+
+      <div x-data="filterComponentDashboard({
+         roast: '{{ request('roast') }}',
+         type: '{{ request('type') }}',
+         country: '{{ request('country') }}',
+         in_stock: '{{ request('in_stock', '1') }}'
+         })">
+                
+         <x-product.filters :filters="[
+            'roast' => request('roast'),
+            'type' => request('type'),
+            'country' => request('country'),
+            'in_stock' => request('in_stock', '1')
+            ]"
             :roasts="$roasts"
             :types="$types"
             :countries="$countries"
-            mode="dashboard"
-         />
-
+            mode="dashboard" />
+            
       </div>
 
       {{-- INVENTORY GRID --}}

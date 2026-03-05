@@ -30,11 +30,11 @@ Eloquent-Coffee-Co is an admin interface for managing coffee products. The syste
     - Seeder and factory to generate realistic mock data for products and types. - CHECK!
 
 2. **CRUD Operations**
-    - Admin can **Create, Read, Update, Delete** coffee products. (In app/Http/Controllers)
+    - Admin can **Create, Read, Update, Delete** coffee products. (In app/Http/Controllers) - CHECK!
     - Forms should be labeled clearly and provide accessible error messages. (In blade files)
 
 3. **Filtering**
-    - Filter products by at least **two attributes** (e.g., intensity, origin). (In app/Http/Controllers)
+    - Filter products by at least **two attributes** (e.g., intensity, origin). (In app/Http/Controllers) - CHECK!
     - Optional: filter by type or price range.
 
 4. **Admin**
@@ -48,7 +48,7 @@ Eloquent-Coffee-Co is an admin interface for managing coffee products. The syste
         - Intensity
         - Origin
         - Type
-    - Pagination for VG grade.
+    - Pagination for VG grade. - CHECK!
     - Accessible design:
         - Semantic HTML
         - Proper labels on forms
