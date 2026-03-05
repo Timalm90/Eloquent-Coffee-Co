@@ -12,6 +12,35 @@
 <body>
    <x-header />
 
+   @if (session('success'))
+    <div 
+        x-data="{ show: true }" 
+        x-show="show"
+        x-transition
+        class="mb-4 p-3 rounded bg-green-100 text-green-800 border border-green-300"
+    >
+        <div class="flex justify-between items-center">
+            <span>{{ session('success') }}</span>
+            <button @click="show = false" class="text-green-900 font-bold">×</button>
+        </div>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div 
+        x-data="{ show: true }" 
+        x-show="show"
+        x-transition
+        class="mb-4 p-3 rounded bg-red-100 text-red-800 border border-red-300"
+    >
+        <div class="flex justify-between items-center">
+            <span>{{ $errors->first() }}</span>
+            <button @click="show = false" class="text-red-900 font-bold">×</button>
+        </div>
+    </div>
+@endif
+
+
    <div class="max-w-7xl mx-auto p-6">
       <div x-data="{ openAddModal: false }">
 
