@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->string('region')->unique();
-
-            // Forein key to origins
-            $table->unsignedBigInteger('country_id');
-            $table->foreign('country_id')->references('id')->on('origins');
+            $table->string('region');
+            $table->foreignId('country_id')->constrained('origins')->onDelete('cascade');
 
             $table->timestamps();
+
+            // Make region unique per country (not globally)
+            $table->unique(['region', 'country_id']);
         });
     }
 

@@ -23,40 +23,51 @@ class CountryController extends Controller
         $filledRegions = array_filter($request->regions, fn($region) => !empty(trim($region)));
 
         if (empty($filledRegions)) {
-            return back()->withErrors(['regions' => 'Please add at least one region.']);
+            return back()
+                ->withInput()
+                ->withErrors(['regions' => 'Please add at least one region.']);
         }
 
-        // Check if country already exists
+        // Get or create country
         $countryExists = Origin::where('country', $request->country)->exists();
-        $country = Origin::firstOrCreate(
-            ['country' => $request->country]
-        );
+        $country = Origin::firstOrCreate(['country' => $request->country]);
 
-        // Track how many regions were added
-        $regionsAdded = 0;
-
-        // Create the regions
+        // Check for duplicate region names WITHIN THIS COUNTRY
+        $duplicateRegions = [];
         foreach ($filledRegions as $regionName) {
-            $region = Region::where('country_id', $country->id)
-                ->where('region', trim($regionName))
-                ->first();
-
-            if (!$region) {
-                Region::create([
-                    'country_id' => $country->id,
-                    'region' => trim($regionName),
-                ]);
-                $regionsAdded++;
+            $trimmedRegion = trim($regionName);
+            if (Region::where('region', $trimmedRegion)
+                ->where('country_id', $country->id)
+                ->exists()
+            ) {
+                $duplicateRegions[] = $trimmedRegion;
             }
         }
 
-        // Determine the appropriate success message
+        if (!empty($duplicateRegions)) {
+            $duplicateList = implode(', ', $duplicateRegions);
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'regions' => "The following region(s) already exist in {$country->country}: {$duplicateList}."
+                ]);
+        }
+
+        // Create the regions
+        $regionsAdded = 0;
+        foreach ($filledRegions as $regionName) {
+            Region::create([
+                'country_id' => $country->id,
+                'region' => trim($regionName),
+            ]);
+            $regionsAdded++;
+        }
+
+        // Success message
         if ($countryExists && $regionsAdded > 0) {
             $message = $regionsAdded === 1
                 ? '1 region added to existing country.'
                 : "{$regionsAdded} regions added to existing country.";
-        } elseif ($countryExists && $regionsAdded === 0) {
-            $message = 'No new regions were added (regions already exist).';
         } else {
             $message = 'Country and regions added successfully.';
         }

@@ -11,7 +11,14 @@ class RegionController extends Controller
     {
         $request->validate([
             'country_id' => 'required|exists:origins,id',
-            'region' => 'required|string|max:255',
+            'region' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:regions,region,NULL,id,country_id,' . $request->country_id
+            ],
+        ], [
+            'region.unique' => 'This region already exists for the selected country.',
         ]);
 
         Region::create([
@@ -19,6 +26,6 @@ class RegionController extends Controller
             'region' => $request->region,
         ]);
 
-        return back()->with('success', 'Region added.');
+        return back()->with('success', 'Region added successfully.');
     }
 }
