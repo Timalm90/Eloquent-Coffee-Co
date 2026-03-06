@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Origin;
+use App\Models\Region;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
@@ -11,12 +12,51 @@ class CountryController extends Controller
     {
         $request->validate([
             'country' => 'required|string|max:255',
+            'regions' => 'required|array|min:1',
+            'regions.*' => 'required|string|max:255',
+        ], [
+            'regions.required' => 'Please add at least one region.',
+            'regions.min' => 'Please add at least one region.',
+            'regions.*.required' => 'All region fields must be filled.',
         ]);
 
-        Origin::create([
-            'country' => $request->country,
-        ]);
+        // Check if country already exists
+        $countryExists = Origin::where('country', $request->country)->exists();
+        $country = Origin::firstOrCreate(
+            ['country' => $request->country]
+        );
 
-        return back()->with('success', 'Country added.');
+        // Track how many regions were added
+        $regionsAdded = 0;
+
+        // Create the regions
+        foreach ($request->regions as $regionName) {
+            if (!empty(trim($regionName))) {
+                $region = Region::where('country_id', $country->id)
+                    ->where('region', trim($regionName))
+                    ->first();
+
+                if (!$region) {
+                    Region::create([
+                        'country_id' => $country->id,
+                        'region' => trim($regionName),
+                    ]);
+                    $regionsAdded++;
+                }
+            }
+        }
+
+        // Determine the appropriate success message
+        if ($countryExists && $regionsAdded > 0) {
+            $message = $regionsAdded === 1
+                ? '1 region added to existing country.'
+                : "{$regionsAdded} regions added to existing country.";
+        } elseif ($countryExists && $regionsAdded === 0) {
+            $message = 'No new regions were added (regions already exist).';
+        } else {
+            $message = 'Country and regions added successfully.';
+        }
+
+        return back()->with('success', $message);
     }
 }
