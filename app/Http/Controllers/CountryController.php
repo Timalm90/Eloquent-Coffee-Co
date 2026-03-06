@@ -13,12 +13,18 @@ class CountryController extends Controller
         $request->validate([
             'country' => 'required|string|max:255',
             'regions' => 'required|array|min:1',
-            'regions.*' => 'required|string|max:255',
+            'regions.*' => 'nullable|string|max:255',
         ], [
             'regions.required' => 'Please add at least one region.',
             'regions.min' => 'Please add at least one region.',
-            'regions.*.required' => 'All region fields must be filled.',
         ]);
+
+        // Filter out empty regions
+        $filledRegions = array_filter($request->regions, fn($region) => !empty(trim($region)));
+
+        if (empty($filledRegions)) {
+            return back()->withErrors(['regions' => 'Please add at least one region.']);
+        }
 
         // Check if country already exists
         $countryExists = Origin::where('country', $request->country)->exists();
@@ -30,19 +36,17 @@ class CountryController extends Controller
         $regionsAdded = 0;
 
         // Create the regions
-        foreach ($request->regions as $regionName) {
-            if (!empty(trim($regionName))) {
-                $region = Region::where('country_id', $country->id)
-                    ->where('region', trim($regionName))
-                    ->first();
+        foreach ($filledRegions as $regionName) {
+            $region = Region::where('country_id', $country->id)
+                ->where('region', trim($regionName))
+                ->first();
 
-                if (!$region) {
-                    Region::create([
-                        'country_id' => $country->id,
-                        'region' => trim($regionName),
-                    ]);
-                    $regionsAdded++;
-                }
+            if (!$region) {
+                Region::create([
+                    'country_id' => $country->id,
+                    'region' => trim($regionName),
+                ]);
+                $regionsAdded++;
             }
         }
 

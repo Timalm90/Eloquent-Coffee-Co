@@ -250,7 +250,7 @@
             <div class="bg-white p-6 rounded shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto"
                x-data="{ 
          category: '{{ old('category', '') }}', 
-         regionCount: {{ old('regions') ? max(count(old('regions')), 1) : 1 }}
+         regionCount: {{ old('regions') ? max(count(old('regions')), 4) : 4 }}
       }">
 
                <h2 class="text-xl font-bold mb-4">Add Data</h2>
@@ -294,7 +294,7 @@
                         class="border rounded p-2 w-full mb-4 @error('country') border-red-500 @enderror">
 
                      <label class="block font-semibold mb-1">Regions <span class="text-red-600">*</span></label>
-                     <p class="text-sm text-gray-600 mb-3">Add at least one region for this country</p>
+                     <p class="text-sm text-gray-600 mb-3">Add at least one region (fill in as many as you need)</p>
 
                      <div class="space-y-3 mb-4">
                         @php
