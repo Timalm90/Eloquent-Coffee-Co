@@ -25,7 +25,7 @@
    </div>
    @endif
 
-   @if ($errors->any())
+   @if ($errors->any() && !$errors->has('dashboard.store'))
    <div
       x-data="{ show: true }"
       x-show="show"
@@ -184,48 +184,90 @@
 
          <div
             x-cloak
-            x-show="openAddModal"
+            x-show="openAddModal || @json($errors->any())"
             class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
 
             <div class="bg-white p-6 rounded shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto">
                <h2>Add product</h2>
+
+               {{-- Display validation errors in modal --}}
+               @if ($errors->any())
+               <div
+                  x-data="{ show: true }"
+                  x-show="show"
+                  x-transition
+                  class="mb-4 p-3 rounded bg-red-100 text-red-800 border border-red-300">
+                  <div class="flex justify-between items-center">
+                     <div>
+                        <strong>Validation Errors:</strong>
+                        <ul class="list-disc ml-5 mt-2">
+                           @foreach ($errors->all() as $error)
+                           <li>{{ $error }}</li>
+                           @endforeach
+                        </ul>
+                     </div>
+                     <button @click="show = false" type="button" class="text-red-900 font-bold">×</button>
+                  </div>
+               </div>
+               @endif
+
                {{-- ADD NEW PRODUCT --}}
                <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-3 gap-4">
                   @csrf
+                  {{-- Store regions data for JavaScript --}}
+                  <script type="text/javascript">
+                     window.allRegions = {!! json_encode($regions) !!};
+                  </script>
 
-                  <input name="name" placeholder="Name" class="border rounded p-2">
+                  <input name="name" placeholder="Name" value="{{ old('name') }}" class="border rounded p-2 @error('name') border-red-500 @enderror">
+                  @error('name')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
 
                   {{-- COUNTRY --}}
-                  <select name="country_id" id="countrySelect" class="border rounded p-2">
+                  <select name="country_id" id="countrySelect" class="border rounded p-2 @error('country_id') border-red-500 @enderror">
                      <option value="">-- Select country --</option>
                      @foreach($countries as $country)
-                     <option value="{{ $country->id }}">{{ $country->country }}</option>
+                     <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>{{ $country->country }}</option>
                      @endforeach
                   </select>
+                  @error('country_id')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
 
                   {{-- REGION --}}
-                  <select name="region_id" id="regionSelect" class="border rounded p-2" disabled>
-                     <option value="">-- Select country first --</option>
+                  <select name="region_id" id="regionSelect" class="border rounded p-2 @error('region_id') border-red-500 @enderror">
+                     <option value="">-- Select region --</option>
+                     @if(old('country_id'))
+                        @php
+                           $selectedCountryRegions = $regions->where('country_id', old('country_id'));
+                        @endphp
+                        @foreach($selectedCountryRegions as $region)
+                        <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>{{ $region->region }}</option>
+                        @endforeach
+                     @endif
                   </select>
+                  @error('region_id')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
 
                   {{-- ROAST --}}
-                  <select name="roast_id" class="border rounded p-2">
+                  <select name="roast_id" class="border rounded p-2 @error('roast_id') border-red-500 @enderror">
                      <option value="">-- Choose roast --</option>
                      @foreach($roasts as $roast)
-                     <option value="{{ $roast->id }}">{{ $roast->roast }}</option>
+                     <option value="{{ $roast->id }}" {{ old('roast_id') == $roast->id ? 'selected' : '' }}>{{ $roast->roast }}</option>
                      @endforeach
                   </select>
+                  @error('roast_id')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
 
                   {{-- TYPE --}}
-                  <select name="type_id" class="border rounded p-2">
+                  <select name="type_id" class="border rounded p-2 @error('type_id') border-red-500 @enderror">
                      <option value="">-- Choose type --</option>
                      @foreach($types as $type)
-                     <option value="{{ $type->id }}">{{ $type->type }}</option>
+                     <option value="{{ $type->id }}" {{ old('type_id') == $type->id ? 'selected' : '' }}>{{ $type->type }}</option>
                      @endforeach
                   </select>
+                  @error('type_id')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
 
-                  <input name="price" type="number" step="0.01" placeholder="0" class="border rounded p-2">
-                  <input name="inventory" type="number" placeholder="0" class="border rounded p-2">
+                  <input name="price" type="number" step="0.01" value="{{ old('price') }}" placeholder="0" class="border rounded p-2 @error('price') border-red-500 @enderror">
+                  @error('price')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
+
+                  <input name="inventory" type="number" value="{{ old('inventory') }}" placeholder="0" class="border rounded p-2 @error('inventory') border-red-500 @enderror">
+                  @error('inventory')<span class="col-span-3 text-red-600 text-sm">{{ $message }}</span>@enderror
 
                   <button class="bg-green-600 text-white px-4 py-2 rounded col-span-3">
                      Add Product
