@@ -1,6 +1,7 @@
 export default function filterComponentCustomer(initialFilters = {}) {
     return {
         filters: {
+            search: initialFilters.search || "",
             roast: initialFilters.roast || "",
             type: initialFilters.type || "",
             country: initialFilters.country || "",
@@ -14,6 +15,7 @@ export default function filterComponentCustomer(initialFilters = {}) {
 
         clearFilters() {
             this.filters = {
+                search: "",
                 roast: "",
                 type: "",
                 country: "",

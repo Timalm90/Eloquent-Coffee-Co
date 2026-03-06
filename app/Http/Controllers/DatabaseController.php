@@ -49,6 +49,11 @@ class DatabaseController extends Controller
             $query->where('type_id', $request->type);
         }
 
+        // Filter by in stock
+        if ($request->filled('in_stock') && $request->in_stock == '1') {
+            $query->where('inventory', '>', 0);
+        }
+
         // Pagination: 20 products per page
         $products = $query->paginate(20)->withQueryString();
 
@@ -85,7 +90,6 @@ class DatabaseController extends Controller
             'name' => 'required|string|max:255|unique:products,name',
             'country_id' => 'required|exists:origins,id',
             'region_id' => 'required|exists:regions,id',
-            // 'suffix_id' => 'required|exists:suffixes,id',
             'roast_id' => 'required|exists:roasts,id',
             'type_id' => 'required|exists:types,id',
             'inventory' => 'nullable|integer|min:0',
@@ -95,6 +99,9 @@ class DatabaseController extends Controller
         // Set default values if not provided
         $data['inventory'] = $data['inventory'] ?? 0;
         $data['price'] = $data['price'] ?? 0;
+
+        // Auto-assign a random suffix (used internally for product naming)
+        $data['suffix_id'] = Suffix::inRandomOrder()->value('id');
 
         Product::create($data);
 
@@ -155,10 +162,9 @@ class DatabaseController extends Controller
             ->with('success', 'Product deleted successfully.');
     }
 
-
-    // TEST ADD PRODUCTS
     public function regionsByCountry($countryId)
     {
-        return Region::where('country_id', $countryId)->get();
+        $regions = Region::where('country_id', $countryId)->get();
+        return response()->json($regions);
     }
 }

@@ -4,6 +4,7 @@ export default function filterComponentDashboard(initialFilters = {}) {
             roast: initialFilters.roast || "",
             type: initialFilters.type || "",
             country: initialFilters.country || "",
+            in_stock: initialFilters.in_stock ?? "1",
         },
 
         updateFilters() {
@@ -16,6 +17,7 @@ export default function filterComponentDashboard(initialFilters = {}) {
                 roast: "",
                 type: "",
                 country: "",
+                in_stock: "1",
             };
             window.location.href = "/dashboard";
         },

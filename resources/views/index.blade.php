@@ -20,6 +20,12 @@
         <form method="GET" class="mb-6 flex gap-3 items-center">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Type here to search..." class="border rounded px-3 py-2 w-64" />
 
+            {{-- Preserve existing filters when searching --}}
+            <input type="hidden" name="roast" value="{{ request('roast') }}">
+            <input type="hidden" name="type" value="{{ request('type') }}">
+            <input type="hidden" name="country" value="{{ request('country') }}">
+            <input type="hidden" name="in_stock" value="{{ request('in_stock', '1') }}">
+
             <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded">
                 Search
             </button>
@@ -27,6 +33,7 @@
 
         <div
             x-data="filterComponentCustomer({
+                search: '{{ request('search') }}',
                 roast: '{{ request('roast') }}',
                 type: '{{ request('type') }}',
                 country: '{{ request('country') }}',
@@ -35,6 +42,7 @@
 
             <x-product.filters
                 :filters="[
+                    'search' => request('search'),
                     'roast' => request('roast'),
                     'type' => request('type'),
                     'country' => request('country'),
@@ -42,9 +50,8 @@
                 ]"
                 :roasts="$roasts"
                 :types="$types"
-                :countries="$countries" 
-                mode="customer"
-                />
+                :countries="$countries"
+                mode="customer" />
 
         </div>
 

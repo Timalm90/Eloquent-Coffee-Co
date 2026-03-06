@@ -6,14 +6,10 @@
 'mode' => 'customer' //default
 ])
 
-@php
-$componentData = $mode === 'dashboard'
-? 'filterComponentDashboard(@js($filters))'
-: 'filterComponentCustomer(@js($filters))';
-@endphp
-
 <div
-    x-data="{{ $mode === 'dashboard' ? 'filterComponentDashboard(@json($filters))' : 'filterComponentCustomer(@json($filters))' }}"
+    x-data="(mode === 'dashboard' 
+    ? filterComponentDashboard(@js($filters) 
+    : filterComponentCustomer(@js($filters)))"
     class="flex flex-wrap gap-4 mb-6 items-center">
 
     {{-- Roast --}}
@@ -46,8 +42,7 @@ $componentData = $mode === 'dashboard'
         @endforeach
     </select>
 
-    {{-- In Stock Toggle (Customer Only) --}}
-    @if($mode === 'customer')
+    {{-- In Stock Toggle --}}
     <div class="flex items-center gap-2">
         <span class="text-sm text-gray-600">Toggle out of stock</span>
 
@@ -60,7 +55,6 @@ $componentData = $mode === 'dashboard'
                 class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
         </div>
     </div>
-    @endif
 
     {{-- Clear --}}
     <button
