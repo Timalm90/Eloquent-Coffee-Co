@@ -42,7 +42,8 @@
         @endforeach
     </select>
 
-    {{-- In Stock Toggle --}}
+    {{-- In Stock Toggle (Customer Only) --}}
+    @if($mode === 'customer')
     <div class="flex items-center gap-2">
         <span class="text-sm text-gray-600">Toggle out of stock</span>
 
@@ -55,6 +56,7 @@
                 class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
         </div>
     </div>
+    @endif
 
     {{-- Clear --}}
     <button

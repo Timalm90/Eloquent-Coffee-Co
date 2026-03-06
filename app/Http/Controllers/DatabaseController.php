@@ -49,11 +49,6 @@ class DatabaseController extends Controller
             $query->where('type_id', $request->type);
         }
 
-        // Filter by in stock
-        if ($request->filled('in_stock') && $request->in_stock == '1') {
-            $query->where('inventory', '>', 0);
-        }
-
         // Pagination: 20 products per page
         $products = $query->paginate(20)->withQueryString();
 

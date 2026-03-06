@@ -66,15 +66,13 @@
          <div x-data="filterComponentDashboard({
          roast: '{{ request('roast') }}',
          type: '{{ request('type') }}',
-         country: '{{ request('country') }}',
-         in_stock: '{{ request('in_stock', '1') }}'
+         country: '{{ request('country') }}'
          })">
 
             <x-product.filters :filters="[
             'roast' => request('roast'),
             'type' => request('type'),
-            'country' => request('country'),
-            'in_stock' => request('in_stock', '1')
+            'country' => request('country')
             ]"
                :roasts="$roasts"
                :types="$types"
