@@ -32,6 +32,7 @@ class ProductController extends Controller
         $roasts = Roast::all();
         $types = Type::all();
         $countries = Origin::all();
+        $countries = Origin::whereHas('products')->get();
 
         if ($request->ajax()) {
             return view('partials.products_grid', compact('products'))->render();
