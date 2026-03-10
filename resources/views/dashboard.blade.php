@@ -129,7 +129,17 @@
                      </td>
 
                      {{-- INVENTORY --}}
-                     <td class="p-3 font-semibold">{{ $product->inventory }}</td>
+                     <td class="p-3">
+                        <div class="font-semibold mb-2">Current: {{ $product->inventory }}</div>
+
+                        {{-- SET INVENTORY (reconciliation) --}}
+                        <form method="POST" action="{{ route('admin.products.inventory.set', $product) }}" class="flex gap-2 items-center">
+                           @csrf
+                           @method('PUT')
+                           <input type="number" name="new_count" placeholder="New" class="border rounded px-2 py-1 w-20" required>
+                           <button class="bg-yellow-500 text-white px-3 py-1 rounded">Set</button>
+                        </form>
+                     </td>
 
                      {{-- ACTIONS --}}
                      <td class="p-3">

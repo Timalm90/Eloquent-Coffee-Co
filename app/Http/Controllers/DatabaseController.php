@@ -9,36 +9,29 @@ use App\Models\Suffix;
 use App\Models\Roast;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = Product::with(['origin', 'region', 'roast', 'type']);
 
-        // Search by name
+        // Filter by name
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Filter by country/origin
+        // Filter by country
         if ($request->filled('country')) {
             $query->where('country_id', $request->country);
         }
-
-        // Alternative origin filter
-        // if ($request->filled('origin')) {
-        //     $query->where('country_id', $request->origin);
-        // }
 
         // Filter by region
         if ($request->filled('region')) {
             $query->where('region_id', $request->region);
         }
-
+        
         // Filter by roast
         if ($request->filled('roast')) {
             $query->where('roast_id', $request->roast);
@@ -161,5 +154,20 @@ class DatabaseController extends Controller
     {
         $regions = Region::where('country_id', $countryId)->get();
         return response()->json($regions);
+    }
+
+    public function setInventory(Request $request, Product $product)
+    {
+        $data = $request->validate([
+            'new_count' => 'required|integer|min:0',
+        ]);
+
+        DB::transaction(function () use ($product, $data) {
+            $p = Product::where('id', $product->id)->lockForUpdate()->first();
+            $p->inventory = $data['new_count'];
+            $p->save();
+        });
+
+        return back()->with('success', 'Inventory updated.');
     }
 }

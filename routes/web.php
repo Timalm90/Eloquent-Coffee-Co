@@ -56,4 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/regions', [RegionController::class, 'store'])->name('regions.store');
     Route::post('/roasts', [RoastController::class, 'store'])->name('roasts.store');
     Route::post('/types', [TypeController::class, 'store'])->name('types.store');
+
+    // Set inventory mapping
+    Route::put('admin/products/{product}/inventory', [DatabaseController::class, 'setInventory'])->name('admin.products.inventory.set');
 });
