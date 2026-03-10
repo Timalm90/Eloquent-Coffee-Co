@@ -20,6 +20,8 @@
 
 body {
     margin-top: 10rem; /* Adjust based on your navbar height */
+    overflow-x: hidden;
+
 }
 
 .navbar {
@@ -47,8 +49,8 @@ body {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    align-items: stretch;
 }
 
 .card {
@@ -76,3 +78,5 @@ input {
 [x-cloak] {
     display: none !important;
 }
+
+
