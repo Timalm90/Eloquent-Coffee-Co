@@ -68,6 +68,14 @@
 
          {{-- FILTER --}}
          <div x-data="filterComponentDashboard({
+
+         get hasFilters() {
+    return (
+        this.filters.roast ||
+        this.filters.type ||
+        this.filters.country
+    );
+}
             roast: '{{ request('roast') }}',
             type: '{{ request('type') }}',
             country: '{{ request('country') }}'

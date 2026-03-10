@@ -13,7 +13,7 @@
 }
 
 body {
-    margin-top: 3rem;
+    margin-top: 8rem; /* Increased from 3rem to accommodate taller navbar */
 }
 
 .navbar {
@@ -21,20 +21,22 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: lightgrey;
+    /* background-color: rgb(255, 255, 255); */
     z-index: 1000;
-    padding: 0.5rem 4rem;
+    padding: 1rem 4rem; /* Increased from 0.5rem to 1rem */
     display: flex;
     justify-content: space-between;
+    align-items: center; /* Added this */
+
+    
 }
 
-.logoNav {
-    height: 40px;
-}
+
 
 .navLinks {
     display: flex;
     gap: 2rem;
+    align-items: center; /* Added this */
 }
 
 .grid {
@@ -64,18 +66,6 @@ input {
     border: 1px solid #ccc;
     border-radius: 8px;
 }
-
-/* button {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f0f0f0;
-    padding: 0.5rem 2rem;
-    cursor: pointer;
-} */
-
-/* button:hover {
-    background-color: #e0e0e0;
-} */
 
 [x-cloak] {
     display: none !important;

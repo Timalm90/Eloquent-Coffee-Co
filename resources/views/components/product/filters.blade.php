@@ -7,9 +7,9 @@
 ])
 
 <div
-    x-data="(mode === 'dashboard' 
-    ? filterComponentDashboard(@js($filters) 
-    : filterComponentCustomer(@js($filters)))"
+    x-data="'{{ $mode }}' === 'dashboard'
+    ? filterComponentDashboard(@js($filters))
+    : filterComponentCustomer(@js($filters))"
     class="flex flex-wrap gap-4 mb-6 items-center">
 
     {{-- Roast --}}
@@ -59,10 +59,12 @@
     @endif
 
     {{-- Clear --}}
-    <button
-        @click="clearFilters()"
-        class="bg-red-500 text-white px-3 py-2 rounded">
-        Clear Filters
+    <button @click="clearFilters()" class="h-16 flex items-center justify-center">
+        <img
+            :src="hasFilters 
+        ? '/images/icons/HasFilterTrue.png' 
+        : '/images/icons/HasFilterFalse.png'"
+            class="h-full w-auto">
     </button>
 
 </div>
