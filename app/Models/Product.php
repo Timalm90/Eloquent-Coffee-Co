@@ -81,6 +81,22 @@ class Product extends Model
 
     protected $appends = ['image_url'];
 
+    // Normalize strings for presentation (preserves DB values)
+    private function normalizeString(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return mb_convert_case(mb_strtolower($value, 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
+    }
+
+    // Accessor for product name
+    public function getNameAttribute($value)
+    {
+        return $this->normalizeString($value);
+    }
+
     public function getImageUrlAttribute()
     {
         return $this->image ?? '/images/default.png';
