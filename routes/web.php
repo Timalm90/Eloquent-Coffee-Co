@@ -57,6 +57,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/roasts', [RoastController::class, 'store'])->name('roasts.store');
     Route::post('/types', [TypeController::class, 'store'])->name('types.store');
 
+    // Destroy routes for data categories
+    Route::delete('/countries/{origin}', [CountryController::class, 'destroy'])->name('countries.destroy');
+    Route::delete('/regions/{region}', [RegionController::class, 'destroy'])->name('regions.destroy');
+    Route::delete('/roasts/{roast}', [RoastController::class, 'destroy'])->name('roasts.destroy');
+    Route::delete('/types/{type}', [TypeController::class, 'destroy'])->name('types.destroy');
+
     // Set inventory mapping
     Route::put('admin/products/{product}/inventory', [DatabaseController::class, 'setInventory'])->name('admin.products.inventory.set');
 });

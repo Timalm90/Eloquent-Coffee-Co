@@ -85,6 +85,12 @@ class CountryController extends Controller
                 ->with('error', "Can't remove this country since it has registered products");
         }
 
+        // Prevent deletion if there are regions attached — require deleting regions explicitly
+        if ($origin->regions()->exists()) {
+            return redirect()->back()
+                ->with('error', "Can't remove this country since it has regions. Delete regions first or delete a specific region.");
+        }
+
 
         try {
             $origin->delete();
