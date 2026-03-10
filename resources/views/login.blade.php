@@ -12,19 +12,21 @@
 <body class="bg-gray-50">
     <x-header />
 
-    <div class="w-full max-w-sm mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
+    <main id="main-content">
+        <div class="w-full max-w-sm mx-auto p-6">
+            <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
 
-        <x-form action="/login">
-            <x-input name="username" label="Username" />
-            <x-input name="password" label="Password" type="password" />
-            <x-button type="submit">
-                Login
-            </x-button>
-        </x-form>
+            <x-form action="/login" aria-label="Login form">
+                <x-input name="username" label="Username" autocomplete="username" />
+                <x-input name="password" label="Password" type="password" autocomplete="current-password" />
+                <x-button type="submit">
+                    Login
+                </x-button>
+            </x-form>
 
-        @include('components/errors')
-    </div>
+            @include('components/errors')
+        </div>
+    </main>
 </body>
 
 </html>
