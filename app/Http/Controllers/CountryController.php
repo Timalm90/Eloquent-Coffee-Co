@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Origin;
 use App\Models\Region;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
@@ -73,5 +74,24 @@ class CountryController extends Controller
         }
 
         return back()->with('success', $message);
+    }
+
+
+    // TEST: Remove country from database (if it has no products or regions linked to it)
+    public function destroy(Origin $origin)
+    {
+        if ($origin->products()->exists()) {
+            return redirect()->back()
+                ->with('error', "Can't remove this country since it has registered products");
+        }
+
+
+        try {
+            $origin->delete();
+        } catch (QueryException $e) {
+            return redirect()->back()->with('error', "Can't remove from database — there are related records.");
+        }
+
+        return redirect()->back()->with('success', 'Country removed.');
     }
 }
