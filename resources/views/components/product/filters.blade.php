@@ -3,6 +3,7 @@
 'roasts',
 'types',
 'countries',
+'regions' => collect(),
 'mode' => 'customer'
 ])
 
@@ -24,7 +25,9 @@
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
             <option value="">All Roasts</option>
             @foreach ($roasts as $roast)
-            <option value="{{ $roast->id }}">{{ $roast->roast }}</option>
+            <option value="{{ $roast->id }}" {{ isset($filters['roast']) && $filters['roast'] == $roast->id ? 'selected' : '' }}>
+                {{ $roast->roast }}
+            </option>
             @endforeach
         </select>
     </div>
@@ -39,7 +42,9 @@
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
             <option value="">All Types</option>
             @foreach ($types as $type)
-            <option value="{{ $type->id }}">{{ $type->type }}</option>
+            <option value="{{ $type->id }}" {{ isset($filters['type']) && $filters['type'] == $type->id ? 'selected' : '' }}>
+                {{ $type->type }}
+            </option>
             @endforeach
         </select>
     </div>
@@ -54,10 +59,31 @@
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
             <option value="">All Countries</option>
             @foreach ($countries as $country)
-            <option value="{{ $country->id }}">{{ $country->country }}</option>
+            <option value="{{ $country->id }}" {{ isset($filters['country']) && $filters['country'] == $country->id ? 'selected' : '' }}>
+                {{ $country->country }}
+            </option>
             @endforeach
         </select>
     </div>
+
+    {{-- Region (Dashboard Only) --}}
+    @if($mode === 'dashboard')
+    <div class="flex flex-col gap-1">
+        <label for="filter-region" class="sr-only">Filter by region</label>
+        <select
+            id="filter-region"
+            x-model="filters.region"
+            @change="updateFilters()"
+            class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+            <option value="">All Regions</option>
+            @foreach ($regions as $region)
+            <option value="{{ $region->id }}" {{ isset($filters['region']) && $filters['region'] == $region->id ? 'selected' : '' }}>
+                {{ $region->region }}
+            </option>
+            @endforeach
+        </select>
+    </div>
+    @endif
 
     {{-- In Stock Toggle (Customer Only) --}}
     @if($mode === 'customer')

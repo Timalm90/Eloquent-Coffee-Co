@@ -5,8 +5,6 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)">
-   <link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
    <title>Admin - Eloquent Coffee Co</title>
    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -129,26 +127,22 @@
             {{-- FILTERS --}}
             <div class="mb-8">
                <div x-data="filterComponentDashboard({
-                  get hasFilters() {
-                     return (
-                        this.filters.roast ||
-                        this.filters.type ||
-                        this.filters.country
-                     );
-                  },
                   roast: '{{ request('roast') }}',
                   type: '{{ request('type') }}',
-                  country: '{{ request('country') }}'
+                  country: '{{ request('country') }}',
+                  region: '{{ request('region') }}'
                })">
                   <x-product.filters
                      :filters="[
                         'roast' => request('roast'),
                         'type' => request('type'),
-                        'country' => request('country')
+                        'country' => request('country'),
+                        'region' => request('region')
                      ]"
                      :roasts="$roasts"
                      :types="$types"
                      :countries="$countries"
+                     :regions="$regions"
                      mode="dashboard" />
                </div>
             </div>

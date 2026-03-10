@@ -17,32 +17,26 @@ class DatabaseController extends Controller
     {
         $query = Product::with(['origin', 'region', 'roast', 'type']);
 
-        // Filter by name
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Filter by country
         if ($request->filled('country')) {
             $query->where('country_id', $request->country);
         }
 
-        // Filter by region
         if ($request->filled('region')) {
             $query->where('region_id', $request->region);
         }
-        
-        // Filter by roast
+
         if ($request->filled('roast')) {
             $query->where('roast_id', $request->roast);
         }
 
-        // Filter by type
         if ($request->filled('type')) {
             $query->where('type_id', $request->type);
         }
 
-        // Pagination: 20 products per page
         $products = $query->paginate(20)->withQueryString();
 
         return view('dashboard', [
@@ -55,9 +49,6 @@ class DatabaseController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('dashboard.products.create', [
@@ -69,9 +60,6 @@ class DatabaseController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -84,11 +72,8 @@ class DatabaseController extends Controller
             'price' => 'nullable|integer|min:0',
         ]);
 
-        // Set default values if not provided
         $data['inventory'] = $data['inventory'] ?? 0;
         $data['price'] = $data['price'] ?? 0;
-
-        // Auto-assign a random suffix (used internally for product naming)
         $data['suffix_id'] = Suffix::inRandomOrder()->value('id');
 
         Product::create($data);
@@ -97,17 +82,11 @@ class DatabaseController extends Controller
             ->with('success', 'Product created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Product $product)
     {
         return view('dashboard.products.show', ['product' => $product]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product)
     {
         return view('dashboard.products.edit', [
@@ -122,11 +101,9 @@ class DatabaseController extends Controller
 
     public function updatePrice(Request $request, Product $product)
     {
-        $data = $request->validate(
-            [
-                'price' => 'required|numeric|min:0'
-            ]
-        );
+        $data = $request->validate([
+            'price' => 'required|numeric|min:0'
+        ]);
 
         $product->update(['price' => $data['price']]);
 
