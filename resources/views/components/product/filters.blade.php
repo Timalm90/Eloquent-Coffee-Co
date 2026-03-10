@@ -49,8 +49,10 @@
 
         <div
             @click="filters.in_stock = filters.in_stock === '1' ? 'all' : '1'; updateFilters()"
-            :class="filters.in_stock === 'all' ? 'bg-red-900' : 'bg-green-300'"
-            class="relative w-11 h-6 rounded-full cursor-pointer transition-colors duration-200">
+            :class="[
+        'relative w-11 h-6 rounded-full cursor-pointer transition-colors duration-200',
+        filters.in_stock === 'all' ? 'bg-zinc-800' : 'bg-zinc-300'
+    ]">
             <div
                 :class="filters.in_stock === 'all' ? 'translate-x-5' : 'translate-x-1'"
                 class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>

@@ -1,7 +1,7 @@
 <nav class="navbar bg-gray-50 shadow-md flex justify-between">
     <div class=" flex items-center">
         <a href="/" class="flex items-center justify-center">
-            <img src="/images/logos/WhiteLogoOnSun.png" alt="Logo" class="h-28 w-auto" />
+            <img src="/images/logos/WhiteLogoOnSun.png" alt="Logo" class="h-28 w-auto hover:scale-105" />
 
         </a>
     </div>
