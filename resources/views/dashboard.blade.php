@@ -50,17 +50,15 @@
    @endif
 
    @php
-   // Define which errors belong to which modal
    $productErrorFields = ['name', 'country_id', 'region_id', 'roast_id', 'type_id', 'price', 'inventory'];
    $dataErrorFields = ['country', 'regions', 'regions.*', 'region', 'roast', 'type', 'category'];
 
-   // Check if we have errors for each modal
    $hasProductErrors = collect($productErrorFields)->some(fn($field) => $errors->has($field));
    $hasDataErrors = collect($dataErrorFields)->some(fn($field) => $errors->has($field));
    @endphp
 
    <div class="max-w-7xl mx-auto p-6">
-      <div x-data="{ 
+      <div x-data="{
          openAddModal: {{ $hasProductErrors ? 'true' : 'false' }},
          openAddDataModal: {{ $hasDataErrors ? 'true' : 'false' }},
          openRemoveDataModal: false
@@ -96,14 +94,13 @@
 
          {{-- FILTER --}}
          <div x-data="filterComponentDashboard({
-
-         get hasFilters() {
-    return (
-        this.filters.roast ||
-        this.filters.type ||
-        this.filters.country
-    );
-}
+            get hasFilters() {
+               return (
+                  this.filters.roast ||
+                  this.filters.type ||
+                  this.filters.country
+               );
+            },
             roast: '{{ request('roast') }}',
             type: '{{ request('type') }}',
             country: '{{ request('country') }}'
@@ -200,385 +197,29 @@
             </table>
          </div>
 
-         {{-- ========================================== --}}
-         {{-- ADD PRODUCT MODAL --}}
-         {{-- ========================================== --}}
-         <div
-            x-cloak
-            x-show="openAddModal"
-            @click.self="openAddModal = false"
-            class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+         {{-- MODALS --}}
+         <x-dashboard.modal-add-product
+            :countries="$countries"
+            :regions="$regions"
+            :roasts="$roasts"
+            :types="$types"
+            :hasProductErrors="$hasProductErrors" />
 
-            <div class="bg-white p-6 rounded shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto">
-               <h2 class="text-xl font-bold mb-4">Add Product</h2>
+         <x-dashboard.modal-add-data
+            :countries="$countries"
+            :regions="$regions"
+            :hasDataErrors="$hasDataErrors" />
 
-               {{-- PRODUCT ERRORS --}}
-               @if ($hasProductErrors)
-               <div class="mb-4 p-3 rounded bg-red-100 text-red-800 border border-red-300">
-                  <strong>Validation Errors:</strong>
-                  <ul class="list-disc ml-5 mt-2">
-                     @foreach ($errors->all() as $error)
-                     <li>{{ $error }}</li>
-                     @endforeach
-                  </ul>
-               </div>
-               @endif
-
-               <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-3 gap-4">
-                  @csrf
-
-                  <input name="name" placeholder="Product Name" value="{{ old('name') }}"
-                     class="border rounded p-2 @error('name') border-red-500 @enderror">
-
-                  <select name="country_id" id="countrySelect"
-                     class="border rounded p-2 @error('country_id') border-red-500 @enderror">
-                     <option value="">-- Select country --</option>
-                     @foreach($countries as $country)
-                     <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
-                        {{ $country->country }}
-                     </option>
-                     @endforeach
-                  </select>
-
-                  <select name="region_id" id="regionSelect"
-                     class="border rounded p-2 @error('region_id') border-red-500 @enderror">
-                     <option value="">-- Select region --</option>
-                     @if(old('country_id'))
-                     @foreach($regions->where('country_id', old('country_id')) as $region)
-                     <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>
-                        {{ $region->region }}
-                     </option>
-                     @endforeach
-                     @endif
-                  </select>
-
-                  <select name="roast_id" class="border rounded p-2 @error('roast_id') border-red-500 @enderror">
-                     <option value="">-- Choose roast --</option>
-                     @foreach($roasts as $roast)
-                     <option value="{{ $roast->id }}" {{ old('roast_id') == $roast->id ? 'selected' : '' }}>
-                        {{ $roast->roast }}
-                     </option>
-                     @endforeach
-                  </select>
-
-                  <select name="type_id" class="border rounded p-2 @error('type_id') border-red-500 @enderror">
-                     <option value="">-- Choose type --</option>
-                     @foreach($types as $type)
-                     <option value="{{ $type->id }}" {{ old('type_id') == $type->id ? 'selected' : '' }}>
-                        {{ $type->type }}
-                     </option>
-                     @endforeach
-                  </select>
-
-                  <input name="price" type="number" step="0.01" value="{{ old('price') }}" placeholder="Price"
-                     class="border rounded p-2 @error('price') border-red-500 @enderror">
-
-                  <input name="inventory" type="number" value="{{ old('inventory') }}" placeholder="Inventory"
-                     class="border rounded p-2 @error('inventory') border-red-500 @enderror">
-
-                  <div class="col-span-3 flex gap-3">
-                     <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded flex-1">Add Product</button>
-                     <button type="button" @click="openAddModal = false" class="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
-                  </div>
-               </form>
-            </div>
-         </div>
-
-         {{-- ========================================== --}}
-         {{-- ADD DATA MODAL --}}
-         {{-- ========================================== --}}
-         <div
-            x-cloak
-            x-show="openAddDataModal"
-            @click.self="openAddDataModal = false"
-            class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-
-            <div class="bg-white p-6 rounded shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto"
-               x-data="{ 
-         category: '{{ old('category', '') }}', 
-         regionCount: {{ old('regions') ? max(count(old('regions')), 4) : 4 }}
-      }">
-
-               <h2 class="text-xl font-bold mb-4">Add Data</h2>
-
-               {{-- DATA ERRORS --}}
-               @if ($hasDataErrors)
-               <div class="mb-4 p-3 rounded bg-red-100 text-red-800 border border-red-300">
-                  <strong>Validation Errors:</strong>
-                  <ul class="list-disc ml-5 mt-2">
-                     @foreach ($errors->all() as $error)
-                     <li>{{ $error }}</li>
-                     @endforeach
-                  </ul>
-               </div>
-               @endif
-
-               <label class="block font-semibold mb-1">Select Category</label>
-               <select x-model="category" class="border rounded p-2 w-full mb-4 @error('category') border-red-500 @enderror">
-                  <option value="">-- Choose category --</option>
-                  <option value="country">Country</option>
-                  <option value="roast">Roast</option>
-                  <option value="type">Type</option>
-               </select>
-
-               {{-- ========================================== --}}
-               {{-- COUNTRY WITH REGIONS --}}
-               {{-- ========================================== --}}
-               <div x-show="category === 'country'">
-                  <form method="POST" action="{{ route('countries.store') }}">
-                     @csrf
-
-                     {{-- Hidden field to preserve category selection --}}
-                     <input type="hidden" name="category" value="country">
-
-                     <label class="block font-semibold mb-1">Country Name <span class="text-red-600">*</span></label>
-                     <input
-                        name="country"
-                        placeholder="e.g., Finland"
-                        value="{{ old('country') }}"
-                        class="border rounded p-2 w-full mb-4 @error('country') border-red-500 @enderror">
-
-                     <label class="block font-semibold mb-1">Regions <span class="text-red-600">*</span></label>
-                     <p class="text-sm text-gray-600 mb-3">Add at least one region (fill in as many as you need)</p>
-
-                     <div class="space-y-3 mb-4">
-                        @php
-                        $oldRegions = (array) old('regions', ['']);
-                        // If old regions exist but are empty, still show at least one field
-                        if (empty($oldRegions) || (count($oldRegions) === 1 && empty($oldRegions[0]))) {
-                        $oldRegions = [''];
-                        }
-                        @endphp
-
-                        <template x-for="(item, index) in regionCount" :key="index">
-                           <input
-                              type="text"
-                              :name="'regions[' + index + ']'"
-                              placeholder="e.g., Österbotten"
-                              :value="(() => {
-                        const oldData = {{ json_encode($oldRegions) }};
-                        return oldData[index] !== undefined ? oldData[index] : '';
-                     })()"
-                              class="border rounded p-2 w-full @error('regions.*') border-red-500 @enderror">
-                        </template>
-                     </div>
-
-                     <button
-                        type="button"
-                        @click="regionCount++"
-                        class="bg-gray-500 text-white px-3 py-1 rounded text-sm mb-4">
-                        + Add Another Region
-                     </button>
-
-                     <div class="flex gap-3">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded flex-1">
-                           Save Country
-                        </button>
-                     </div>
-                  </form>
-               </div>
-
-               {{-- ========================================== --}}
-               {{-- REGION ONLY --}}
-               {{-- ========================================== --}}
-               {{-- <div x-show="category === 'region'">
-                  <form method="POST" action="{{ route('regions.store') }}">
-                     @csrf --}}
-
-                     {{-- Hidden field to preserve category selection --}}
-                     {{-- <input type="hidden" name="category" value="region">
-
-                     <label class="block font-semibold mb-1">Country <span class="text-red-600">*</span></label>
-                     <select
-                        name="country_id"
-                        class="border rounded p-2 w-full mb-3 @error('country_id') border-red-500 @enderror">
-                        <option value="">-- Select country --</option>
-                        @foreach($countries as $country)
-                        <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
-                           {{ $country->country }}
-                        </option>
-                        @endforeach
-                     </select>
-
-                     <label class="block font-semibold mb-1">Region Name <span class="text-red-600">*</span></label>
-                     <input
-                        name="region"
-                        placeholder="e.g., Österbotten"
-                        value="{{ old('region') }}"
-                        class="border rounded p-2 w-full mb-3 @error('region') border-red-500 @enderror">
-
-                     <div class="flex gap-3">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded flex-1">
-                           Save Region
-                        </button>
-                     </div>
-                  </form>
-               </div> --}}
-
-               {{-- ========================================== --}}
-               {{-- ROAST --}}
-               {{-- ========================================== --}}
-               <div x-show="category === 'roast'">
-                  <form method="POST" action="{{ route('roasts.store') }}">
-                     @csrf
-
-                     {{-- Hidden field to preserve category selection --}}
-                     <input type="hidden" name="category" value="roast">
-
-                     <label class="block font-semibold mb-1">Roast Name <span class="text-red-600">*</span></label>
-                     <input
-                        name="roast"
-                        placeholder="e.g., Light Roast"
-                        value="{{ old('roast') }}"
-                        class="border rounded p-2 w-full mb-3 @error('roast') border-red-500 @enderror">
-
-                     <div class="flex gap-3">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded flex-1">
-                           Save Roast
-                        </button>
-                     </div>
-                  </form>
-               </div>
-
-               {{-- ========================================== --}}
-               {{-- TYPE --}}
-               {{-- ========================================== --}}
-               <div x-show="category === 'type'">
-                  <form method="POST" action="{{ route('types.store') }}">
-                     @csrf
-
-                     {{-- Hidden field to preserve category selection --}}
-                     <input type="hidden" name="category" value="type">
-
-                     <label class="block font-semibold mb-1">Type Name <span class="text-red-600">*</span></label>
-                     <input
-                        name="type"
-                        placeholder="e.g., Arabica"
-                        value="{{ old('type') }}"
-                        class="border rounded p-2 w-full mb-3 @error('type') border-red-500 @enderror">
-
-                     <div class="flex gap-3">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded flex-1">
-                           Save Type
-                        </button>
-                     </div>
-                  </form>
-               </div>
-
-               <button
-                  @click="openAddDataModal = false"
-                  class="mt-4 bg-gray-400 text-white px-4 py-2 rounded w-full">
-                  Close
-               </button>
-            </div>
-         </div>
-
-         {{-- ========================================== --}}
-         {{-- REMOVE DATA MODAL --}}
-         {{-- ========================================== --}}
-         <div
-            x-cloak
-            x-show="openRemoveDataModal"
-            @click.self="openRemoveDataModal = false"
-            class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-
-            <div class="bg-white p-6 rounded shadow-lg w-[60vw] max-h-[80vh] overflow-y-auto"
-               data-regions='@json($regions->map(fn($r) => ['id' => $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
-               x-data="{ category: '', selectedCountry: '', selectedRegion: '', selectedRoast: '', selectedType: '', regions: [] }"
-               x-init="regions = JSON.parse($el.dataset.regions)">
-               <h2 class="text-xl font-bold mb-4">Remove Data</h2>
-
-               <label class="block font-semibold mb-2">Select Category</label>
-               <select x-model="category" class="border rounded p-2 w-full mb-4">
-                  <option value="">-- Choose category --</option>
-                  <option value="country">Country and/or Region</option>
-                  <option value="roast">Roast</option>
-                  <option value="type">Type</option>
-               </select>
-
-               {{-- COUNTRY DELETE --}}
-               <div x-show="category === 'country'">
-                  <form :action="selectedRegion ? `/regions/${selectedRegion}` : `/countries/${selectedCountry}`" method="POST">
-                     @csrf
-                     @method('DELETE')
-
-                     <label class="block font-semibold mb-1">Select Country</label>
-                     <select x-model="selectedCountry" @change="selectedRegion = ''" class="border rounded p-2 w-full mb-4">
-                        <option value="">-- Choose country --</option>
-                        @foreach($countries as $country)
-                        <option value="{{ $country->id }}">{{ $country->country }}</option>
-                        @endforeach
-                     </select>
-
-                     <template x-if="selectedCountry">
-                        <div class="mb-4">
-                           <label class="block font-semibold mb-1">Optional: Select Region to delete only that region</label>
-                           <select x-model="selectedRegion" class="border rounded p-2 w-full">
-                              <option value="">-- No region selected --</option>
-                              <template x-for="r in regions.filter(x => String(x.country_id) === String(selectedCountry))" :key="r.id">
-                                 <option :value="r.id" x-text="r.region"></option>
-                              </template>
-                           </select>
-                        </div>
-                     </template>
-
-                     <p class="text-sm text-gray-600 mb-4">If you select a region the region will be deleted. If you only select country, the controller will run checks and delete the country if allowed.</p>
-                     <div class="flex gap-3">
-                        <button type="submit" :disabled="!selectedCountry" class="bg-red-600 text-white px-4 py-2 rounded">Delete</button>
-                        <button type="button" @click="openRemoveDataModal = false" class="bg-gray-400 px-4 py-2 rounded">Cancel</button>
-                     </div>
-                  </form>
-               </div>
-
-               {{-- ROAST DELETE --}}
-               <div x-show="category === 'roast'">
-                  <form :action="`/roasts/${selectedRoast}`" method="POST">
-                     @csrf
-                     @method('DELETE')
-
-                     <label class="block font-semibold mb-1">Select Roast</label>
-                     <select x-model="selectedRoast" class="border rounded p-2 w-full mb-4">
-                        <option value="">-- Choose roast --</option>
-                        @foreach($roasts as $roast)
-                        <option value="{{ $roast->id }}">{{ $roast->roast }}</option>
-                        @endforeach
-                     </select>
-
-                     <div class="flex gap-3">
-                        <button type="submit" :disabled="!selectedRoast" class="bg-red-600 text-white px-4 py-2 rounded">Delete Roast</button>
-                        <button type="button" @click="openRemoveDataModal = false" class="bg-gray-400 px-4 py-2 rounded">Cancel</button>
-                     </div>
-                  </form>
-               </div>
-
-               {{-- TYPE DELETE --}}
-               <div x-show="category === 'type'">
-                  <form :action="`/types/${selectedType}`" method="POST">
-                     @csrf
-                     @method('DELETE')
-
-                     <label class="block font-semibold mb-1">Select Type</label>
-                     <select x-model="selectedType" class="border rounded p-2 w-full mb-4">
-                        <option value="">-- Choose type --</option>
-                        @foreach($types as $type)
-                        <option value="{{ $type->id }}">{{ $type->type }}</option>
-                        @endforeach
-                     </select>
-
-                     <div class="flex gap-3">
-                        <button type="submit" :disabled="!selectedType" class="bg-red-600 text-white px-4 py-2 rounded">Delete Type</button>
-                        <button type="button" @click="openRemoveDataModal = false" class="bg-gray-400 px-4 py-2 rounded">Cancel</button>
-                     </div>
-                  </form>
-               </div>
-
-            </div>
-         </div>
+         <x-dashboard.modal-remove-data
+            :countries="$countries"
+            :regions="$regions"
+            :roasts="$roasts"
+            :types="$types" />
 
       </div>
 
       {{-- PAGINATION --}}
-      <div class="mt-6">
+      <div class="mt-10 flex flex-col items-center gap-4">
          {{ $products->links() }}
       </div>
    </div>
