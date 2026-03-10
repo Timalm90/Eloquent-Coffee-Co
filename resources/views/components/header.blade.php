@@ -1,18 +1,18 @@
-<nav class="navbar">
-    <div class="flex items-center">
+<nav class="navbar bg-gray-50 shadow-md flex justify-between">
+    <div class=" flex items-center">
         <a href="/" class="flex items-center justify-center">
-            <img src="/images/logos/WhiteLogoOnSun.png" alt="Logo" style="height: 150px; width: auto;" />
+            <img src="/images/logos/WhiteLogoOnSun.png" alt="Logo" class="h-28 w-auto" />
 
         </a>
     </div>
 
     <div class="navLinks">
-        <a href="/dashboard" class="text-blue-500 hover:underline">Dashboard</a>
+        <a href="/dashboard" class="text-black text-3xl font-bold hover:underline font-[family-name:var(--font-afacad)]">DASHBOARD</a>
         @guest
-        <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a>
+        <a href="{{ route('login') }}" class="text-black text-3xl font-bold hover:underline font-[family-name:var(--font-afacad)]">LOGIN</a>
         @endguest
         @auth
-        <a href="/logout" class="text-blue-500 hover:underline">Logout</a>
+        <a href="/logout" class="text-black text-3xl font-bold hover:underline font-[family-name:var(--font-afacad)]">LOGOUT</a>
         @endauth
     </div>
 </nav>

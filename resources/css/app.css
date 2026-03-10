@@ -1,19 +1,25 @@
 @import "tailwindcss";
-
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap');
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+
 
 @theme {
     --font-sans:
         "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
+
+            --font-afacad:
+        "Afacad", sans-serif;
 }
 
+
+
 body {
-    margin-top: 8rem; /* Increased from 3rem to accommodate taller navbar */
+    margin-top: 10rem; /* Adjust based on your navbar height */
 }
 
 .navbar {
@@ -23,7 +29,7 @@ body {
     right: 0;
     /* background-color: rgb(255, 255, 255); */
     z-index: 1000;
-    padding: 1rem 4rem; /* Increased from 0.5rem to 1rem */
+    padding: 0.5rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center; /* Added this */
