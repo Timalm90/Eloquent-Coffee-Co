@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     // Destroy routes for data categories
     Route::delete('/countries/{origin}', [CountryController::class, 'destroy'])->name('countries.destroy');
     Route::delete('/regions/{region}', [RegionController::class, 'destroy'])->name('regions.destroy');
+
     Route::delete('/roasts/{roast}', [RoastController::class, 'destroy'])->name('roasts.destroy');
     Route::delete('/types/{type}', [TypeController::class, 'destroy'])->name('types.destroy');
 

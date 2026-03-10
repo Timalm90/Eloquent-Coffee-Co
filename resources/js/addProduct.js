@@ -1,35 +1,38 @@
 const countrySelect = document.getElementById("countrySelect");
 const regionSelect = document.getElementById("regionSelect");
 
-countrySelect.addEventListener("change", function () {
-    const countryId = this.value;
+if (countrySelect && regionSelect) {
 
-    // Remove option
-    while (regionSelect.firstChild) {
-        regionSelect.removeChild(regionSelect.firstChild);
-    }
+    countrySelect.addEventListener("change", function () {
+        const countryId = this.value;
 
-    // Add default option
-    regionSelect.appendChild(new Option("-- Select country first --", ""));
-    regionSelect.disabled = true;
+        // Remove options
+        while (regionSelect.firstChild) {
+            regionSelect.removeChild(regionSelect.firstChild);
+        }
 
-    if (!countryId) return;
+        regionSelect.appendChild(new Option("-- Select country first --", ""));
+        regionSelect.disabled = true;
 
-    fetch(`/regions-by-country/${countryId}`)
-        .then((response) => response.json())
-        .then((regions) => {
-            // Remove option and add new
-            while (regionSelect.firstChild) {
-                regionSelect.removeChild(regionSelect.firstChild);
-            }
+        if (!countryId) return;
 
-            regionSelect.appendChild(new Option("-- Select region --", ""));
+        fetch(`/regions-by-country/${countryId}`)
+            .then((response) => response.json())
+            .then((regions) => {
 
-            regions.forEach((region) => {
-                const opt = new Option(region.region, region.id);
-                regionSelect.appendChild(opt);
+                while (regionSelect.firstChild) {
+                    regionSelect.removeChild(regionSelect.firstChild);
+                }
+
+                regionSelect.appendChild(new Option("-- Select region --", ""));
+
+                regions.forEach((region) => {
+                    const opt = new Option(region.region, region.id);
+                    regionSelect.appendChild(opt);
+                });
+
+                regionSelect.disabled = false;
             });
+    });
 
-            regionSelect.disabled = false;
-        });
-});
+}

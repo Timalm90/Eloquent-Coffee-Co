@@ -17,10 +17,9 @@
     class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
 
     <div class="bg-white p-6 rounded-lg shadow-lg w-[60vw] max-h-[80vh] overflow-y-auto"
-        data-regions='@json($regions->map(fn($r) => [' id'=> $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
+        data-regions='@json($regions)'
         x-data="{ category: '', selectedCountry: '', selectedRegion: '', selectedRoast: '', selectedType: '', regions: [] }"
-        x-init="regions = JSON.parse($el.dataset.regions)">
-
+        x-init="regions = JSON.parse($el.dataset.regions || '[]')"
         <h2 id="modal-remove-data-title" class="text-xl font-semibold text-gray-900 mb-1">Remove Data</h2>
         <p class="text-sm text-gray-500 mb-6">Permanently remove countries, regions, roasts, or types from the catalogue</p>
 
@@ -68,7 +67,7 @@
                             x-model="selectedRegion"
                             class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
                             <option value="">-- No region selected --</option>
-                            <template x-for="r in regions.filter(x => String(x.country_id) === String(selectedCountry))" :key="r.id">
+                            <template x-for="r in regions.filter(r => r.country_id == selectedCountry)" :key="r.id">
                                 <option :value="r.id" x-text="r.region"></option>
                             </template>
                         </select>

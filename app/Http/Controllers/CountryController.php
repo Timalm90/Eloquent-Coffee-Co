@@ -85,19 +85,17 @@ class CountryController extends Controller
                 ->with('error', "Can't remove this country since it has registered products");
         }
 
-        // Prevent deletion if there are regions attached — require deleting regions explicitly
-        if ($origin->regions()->exists()) {
-            return redirect()->back()
-                ->with('error', "Can't remove this country since it has regions. Delete regions first or delete a specific region.");
-        }
-
-
         try {
+            // delete regions first
+            $origin->regions()->delete();
+
+            // then delete the country
             $origin->delete();
         } catch (QueryException $e) {
-            return redirect()->back()->with('error', "Can't remove from database — there are related records.");
+            return redirect()->back()
+                ->with('error', "Can't remove from database — there are related records.");
         }
 
-        return redirect()->back()->with('success', 'Country removed.');
+        return redirect()->back()->with('success', 'Country and related regions removed.');
     }
 }
