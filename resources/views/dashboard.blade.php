@@ -228,10 +228,7 @@
                   </table>
                </div>
 
-               {{-- Pagination --}}
-               <nav aria-label="Product pagination" class="mt-6 flex items-center justify-center">
-                  {{ $products->links() }}
-               </nav>
+
             </div>
 
             {{-- MODALS --}}
