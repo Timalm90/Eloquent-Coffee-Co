@@ -16,9 +16,31 @@ export default function filterComponentDashboard(initialFilters = {}) {
             );
         },
 
-        updateFilters() {
+        async updateFilters() {
             const params = new URLSearchParams(this.filters);
-            window.location.href = `/dashboard?${params.toString()}`;
+            const url = `/dashboard?${params.toString()}`;
+
+            try {
+                const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!res.ok) throw new Error('Network response was not ok');
+                const html = await res.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newTable = doc.getElementById('products-table');
+                const currentTable = document.getElementById('products-table');
+
+                if (newTable && currentTable) {
+                    currentTable.replaceWith(newTable);
+                }
+
+                // Update URL without reloading
+                history.pushState({}, '', url);
+            } catch (err) {
+                console.error('Failed to fetch filtered products', err);
+                // Fallback to full reload
+                window.location.href = url;
+            }
         },
 
         clearFilters() {
@@ -28,7 +50,9 @@ export default function filterComponentDashboard(initialFilters = {}) {
                 country: "",
                 region: "",
             };
-            window.location.href = "/dashboard";
+
+            // fetch and replace products
+            this.updateFilters();
         },
     };
 }

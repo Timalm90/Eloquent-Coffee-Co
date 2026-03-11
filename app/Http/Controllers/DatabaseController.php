@@ -39,6 +39,13 @@ class DatabaseController extends Controller
 
         $products = $query->paginate(20)->withQueryString();
 
+        // If this is an AJAX request, return only the products table partial (HTML)
+        if ($request->ajax()) {
+            return view('dashboard._products_table', [
+                'products' => $products,
+            ]);
+        }
+
         return view('dashboard', [
             'products' => $products,
             'countries' => Origin::all(),

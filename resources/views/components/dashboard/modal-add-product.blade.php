@@ -19,7 +19,7 @@
     class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-start justify-center z-[1100] overflow-y-auto py-8 px-4">
 
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl my-auto"
-        data-regions='@json($regions->map(fn($r) => [' id'=> $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
+        data-regions='@json($regions->map(fn($r) => ['id'=> $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
         x-data="{ regions: [], selectedCountry: '{{ old('country_id', '') }}', selectedRegion: '{{ old('region_id', '') }}' }"
         x-init="regions = JSON.parse($el.dataset.regions)">
 
@@ -106,11 +106,10 @@
                     required
                     aria-required="true"
                     x-model="selectedRegion"
-                    :disabled="!selectedCountry"
                     @error('region_id') aria-invalid="true" aria-describedby="error-region" @enderror
                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 @error('region_id') border-red-400 @enderror">
                     <option value="">-- Select region --</option>
-                    <template x-for="r in regions.filter(x => String(x.country_id) === String(selectedCountry))" :key="r.id">
+                    <template x-for="r in regions.filter(x => !selectedCountry || String(x.country_id) === String(selectedCountry))" :key="r.id">
                         <option :value="r.id" :selected="String(selectedRegion) === String(r.id)" x-text="r.region"></option>
                     </template>
                 </select>

@@ -11,6 +11,8 @@
     x-data="'{{ $mode }}' === 'dashboard'
     ? filterComponentDashboard(@js($filters))
     : filterComponentCustomer(@js($filters))"
+    data-regions='@json($regions->map(fn($r) => ['id' => $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
+    x-init="regions = JSON.parse($el.dataset.regions || '[]')"
     class="flex flex-wrap gap-4 mb-6 items-center"
     role="search"
     aria-label="Filter products">
@@ -76,11 +78,9 @@
             @change="updateFilters()"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
             <option value="">All Regions</option>
-            @foreach ($regions as $region)
-            <option value="{{ $region->id }}" {{ isset($filters['region']) && $filters['region'] == $region->id ? 'selected' : '' }}>
-                {{ $region->region }}
-            </option>
-            @endforeach
+            <template x-for="r in regions.filter(r => !filters.country || String(r.country_id) === String(filters.country))" :key="r.id">
+                <option :value="r.id" x-text="r.region"></option>
+            </template>
         </select>
     </div>
     @endif
