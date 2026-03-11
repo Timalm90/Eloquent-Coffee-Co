@@ -18,7 +18,10 @@
     aria-labelledby="modal-add-product-title"
     class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-start justify-center z-[1100] overflow-y-auto py-8 px-4">
 
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl my-auto">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl my-auto"
+        data-regions='@json($regions->map(fn($r) => ['id' => $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
+        x-data="{ regions: [], selectedCountry: '{{ old('country_id', '') }}', selectedRegion: '{{ old('region_id', '') }}' }"
+        x-init="regions = JSON.parse($el.dataset.regions)">
 
         <div class="flex justify-between items-start mb-1">
             <h2 id="modal-add-product-title" class="text-xl font-semibold text-gray-900">Add Product</h2>
@@ -75,6 +78,8 @@
                     name="country_id"
                     required
                     aria-required="true"
+                    x-model="selectedCountry"
+                    @change="selectedCountry = $event.target.value; selectedRegion = ''"
                     @error('country_id') aria-invalid="true" aria-describedby="error-country" @enderror
                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 @error('country_id') border-red-400 @enderror">
                     <option value="">-- Select country --</option>
@@ -94,22 +99,22 @@
                     Region <span aria-hidden="true" class="text-red-500">*</span>
                     <span class="sr-only">(required)</span>
                 </label>
+
                 <select
                     id="product-region"
                     name="region_id"
                     required
                     aria-required="true"
+                    x-model="selectedRegion"
+                    :disabled="!selectedCountry"
                     @error('region_id') aria-invalid="true" aria-describedby="error-region" @enderror
                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 @error('region_id') border-red-400 @enderror">
                     <option value="">-- Select region --</option>
-                    @if(old('country_id'))
-                    @foreach($regions->where('country_id', old('country_id')) as $region)
-                    <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>
-                        {{ $region->region }}
-                    </option>
-                    @endforeach
-                    @endif
+                    <template x-for="r in regions.filter(x => String(x.country_id) === String(selectedCountry))" :key="r.id">
+                        <option :value="r.id" :selected="String(selectedRegion) === String(r.id)" x-text="r.region"></option>
+                    </template>
                 </select>
+
                 @error('region_id')
                 <p id="error-region" role="alert" class="text-xs text-red-600 mt-1">{{ $message }}</p>
                 @enderror

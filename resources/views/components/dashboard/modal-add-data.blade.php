@@ -52,7 +52,7 @@
                 x-model="category"
                 class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 @error('category') border-red-400 @enderror">
                 <option value="">-- Choose category --</option>
-                <option value="country">Country</option>
+                <option value="country">Country and/or region</option>
                 <option value="roast">Roast</option>
                 <option value="type">Type</option>
             </select>
