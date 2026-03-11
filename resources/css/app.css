@@ -38,7 +38,35 @@ body {
     gap: 2rem;
     align-items: center;
 }
+.nav-link {
+    position: relative;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #111;
+    text-decoration: none;
+    padding-bottom: 2px;
+}
 
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background-color: #111;
+    transition: width 0.25s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #444;
+    transition: color 0.2s ease;
+}
 .grid {
     display: grid;
     gap: 20px;
