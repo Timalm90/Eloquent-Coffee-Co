@@ -10,16 +10,26 @@
     id="modal-add-product"
     x-cloak
     x-show="openAddModal"
+    x-trap.inert.noscroll="openAddModal"
     @click.self="openAddModal = false"
     @keydown.escape.window="openAddModal = false"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-add-product-title"
-    class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-start justify-center z-[1100] overflow-y-auto py-8 px-4">
 
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl my-auto">
 
-        <h2 id="modal-add-product-title" class="text-xl font-semibold text-gray-900 mb-1">Add Product</h2>
+        <div class="flex justify-between items-start mb-1">
+            <h2 id="modal-add-product-title" class="text-xl font-semibold text-gray-900">Add Product</h2>
+            <button
+                type="button"
+                @click="openAddModal = false"
+                aria-label="Close Add Product dialog"
+                class="text-gray-400 hover:text-gray-600 text-2xl leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 rounded">
+                ×
+            </button>
+        </div>
         <p class="text-sm text-gray-500 mb-6">Fill in the details below to add a new product to the catalogue</p>
 
         @if ($hasProductErrors)
@@ -33,7 +43,7 @@
         </div>
         @endif
 
-        <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-3 gap-4" novalidate>
+        <form method="POST" action="{{ route('dashboard.store') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" novalidate>
             @csrf
 
             <div class="flex flex-col gap-1">
@@ -196,7 +206,7 @@
                 @enderror
             </div>
 
-            <div class="col-span-3 flex gap-3 pt-2 border-t border-gray-100 mt-2">
+            <div class="col-span-full flex gap-3 pt-2 border-t border-gray-100 mt-2">
                 <button type="submit" class="flex-1 px-4 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                     Add Product
                 </button>

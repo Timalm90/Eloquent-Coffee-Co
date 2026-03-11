@@ -12,16 +12,13 @@
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 
-            --font-afacad:
+    --font-afacad:
         "Afacad", sans-serif;
 }
 
-
-
 body {
-    margin-top: 10rem; /* Adjust based on your navbar height */
+    margin-top: 10rem;
     overflow-x: hidden;
-
 }
 
 .navbar {
@@ -29,22 +26,17 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    /* background-color: rgb(255, 255, 255); */
     z-index: 1000;
     padding: 0.5rem 3rem;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Added this */
-
-    
+    align-items: center;
 }
-
-
 
 .navLinks {
     display: flex;
     gap: 2rem;
-    align-items: center; /* Added this */
+    align-items: center;
 }
 
 .grid {
@@ -79,4 +71,7 @@ input {
     display: none !important;
 }
 
-
+/* Modals must always sit above the fixed navbar */
+[role="dialog"] {
+    z-index: 1100;
+}

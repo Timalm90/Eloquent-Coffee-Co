@@ -8,20 +8,30 @@
     id="modal-add-data"
     x-cloak
     x-show="openAddDataModal"
+    x-trap.inert.noscroll="openAddDataModal"
     @click.self="openAddDataModal = false"
     @keydown.escape.window="openAddDataModal = false"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-add-data-title"
-    class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-start justify-center z-[1100] overflow-y-auto py-8 px-4">
 
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[80vw] max-h-[90vh] overflow-y-auto"
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl my-auto"
         x-data="{
             category: '{{ old('category', '') }}',
             regionCount: {{ old('regions') ? max(count(old('regions')), 4) : 4 }}
         }">
 
-        <h2 id="modal-add-data-title" class="text-xl font-semibold text-gray-900 mb-1">Add Data</h2>
+        <div class="flex justify-between items-start mb-1">
+            <h2 id="modal-add-data-title" class="text-xl font-semibold text-gray-900">Add Data</h2>
+            <button
+                type="button"
+                @click="openAddDataModal = false"
+                aria-label="Close Add Data dialog"
+                class="text-gray-400 hover:text-gray-600 text-2xl leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 rounded">
+                ×
+            </button>
+        </div>
         <p class="text-sm text-gray-500 mb-6">Add new countries, roasts, or types to the catalogue</p>
 
         @if ($hasDataErrors)
@@ -40,8 +50,7 @@
             <select
                 id="data-category"
                 x-model="category"
-                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 @error('category') border-red-400 @enderror"
-                aria-controls="section-country section-roast section-type">
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 @error('category') border-red-400 @enderror">
                 <option value="">-- Choose category --</option>
                 <option value="country">Country</option>
                 <option value="roast">Roast</option>
@@ -204,7 +213,6 @@
             </form>
         </section>
 
-        {{-- Placeholder when no category selected --}}
         <div x-show="category === ''" class="py-8 text-center text-sm text-gray-400" aria-live="polite">
             Select a category above to get started
         </div>

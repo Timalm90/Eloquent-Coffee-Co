@@ -9,18 +9,29 @@
     id="modal-remove-data"
     x-cloak
     x-show="openRemoveDataModal"
+    x-trap.inert.noscroll="openRemoveDataModal"
     @click.self="openRemoveDataModal = false"
     @keydown.escape.window="openRemoveDataModal = false"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-remove-data-title"
-    class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-start justify-center z-[1100] overflow-y-auto py-8 px-4">
 
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[60vw] max-h-[80vh] overflow-y-auto"
-        data-regions='@json($regions)'
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg my-auto"
+        data-regions='@json($regions->map(fn($r) => ["id" => $r->id, "country_id" => $r->country_id, "region" => $r->region]))'
         x-data="{ category: '', selectedCountry: '', selectedRegion: '', selectedRoast: '', selectedType: '', regions: [] }"
-        x-init="regions = JSON.parse($el.dataset.regions || '[]')"
-        <h2 id="modal-remove-data-title" class="text-xl font-semibold text-gray-900 mb-1">Remove Data</h2>
+        x-init="regions = JSON.parse($el.dataset.regions || '[]')">
+
+        <div class="flex justify-between items-start mb-1">
+            <h2 id="modal-remove-data-title" class="text-xl font-semibold text-gray-900">Remove Data</h2>
+            <button
+                type="button"
+                @click="openRemoveDataModal = false"
+                aria-label="Close Remove Data dialog"
+                class="text-gray-400 hover:text-gray-600 text-2xl leading-none focus:outline-none focus:ring-2 focus:ring-gray-400 rounded">
+                ×
+            </button>
+        </div>
         <p class="text-sm text-gray-500 mb-6">Permanently remove countries, regions, roasts, or types from the catalogue</p>
 
         <div class="flex flex-col gap-1 mb-6">
@@ -74,7 +85,9 @@
                     </div>
                 </template>
 
-                <p class="text-xs text-gray-400 mb-6" id="country-delete-hint">Selecting a region removes only that region. Selecting only a country will trigger controller-level checks before deletion.</p>
+                <p class="text-xs text-gray-400 mb-6" id="country-delete-hint">
+                    Selecting a region removes only that region. Selecting only a country will trigger controller-level checks before deletion.
+                </p>
 
                 <div class="flex gap-3 pt-2 border-t border-gray-100">
                     <button
@@ -160,7 +173,6 @@
             </form>
         </section>
 
-        {{-- Placeholder when no category selected --}}
         <div x-show="category === ''" class="py-8 text-center text-sm text-gray-400" aria-live="polite">
             Select a category above to get started
         </div>
