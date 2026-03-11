@@ -19,7 +19,7 @@
     class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-start justify-center z-[1100] overflow-y-auto py-8 px-4">
 
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl my-auto"
-        data-regions='@json($regions->map(fn($r) => ['id' => $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
+        data-regions='@json($regions->map(fn($r) => [' id'=> $r->id, 'country_id' => $r->country_id, 'region' => $r->region]))'
         x-data="{ regions: [], selectedCountry: '{{ old('country_id', '') }}', selectedRegion: '{{ old('region_id', '') }}' }"
         x-init="regions = JSON.parse($el.dataset.regions)">
 
@@ -170,7 +170,7 @@
 
             <div class="flex flex-col gap-1">
                 <label for="product-price" class="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                    Price <span aria-hidden="true" class="text-red-500">*</span>
+                    Price
                     <span class="sr-only">(required)</span>
                 </label>
                 <input
@@ -180,7 +180,7 @@
                     step="0.01"
                     min="0"
                     value="{{ old('price') }}"
-                    placeholder="0.00"
+                    placeholder="0"
                     required
                     aria-required="true"
                     @error('price') aria-invalid="true" aria-describedby="error-price" @enderror
@@ -192,7 +192,7 @@
 
             <div class="flex flex-col gap-1">
                 <label for="product-inventory" class="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                    Inventory <span aria-hidden="true" class="text-red-500">*</span>
+                    Inventory
                     <span class="sr-only">(required)</span>
                 </label>
                 <input
