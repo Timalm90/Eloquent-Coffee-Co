@@ -19,47 +19,44 @@ cd Eloquent-Coffee-Co
 composer install
 ```
 
-### 3. Set up your environment
+### 3. Configure the environment
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-Open `.env` and configure your database connection:
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=eloquent_coffee
-DB_USERNAME=root
-DB_PASSWORD=
-```
+> If your database is running on a port other than `3306`, update `DB_PORT` in `.env` accordingly.
 
 ### 4. Run migrations and seed the database
 
 ```bash
-php artisan migrate
-php artisan db:seed
+php artisan migrate:fresh --seed
 ```
 
-### 5. Install frontend dependencies and start Vite
+### 5. Install frontend dependencies and compile assets
 
 ```bash
 npm install
 npm run dev
 ```
 
-> Use `npm run build` instead if you're deploying to production.
-
 ### 6. Start the development server
+
+Open a new terminal window and run:
 
 ```bash
 php artisan serve
 ```
 
 The application will be available at [http://localhost:8000](http://localhost:8000).
+
+**Default credentials**
+
+| Field    | Value        |
+|----------|--------------|
+| Username | `admin`      |
+| Password | `coffeebean` |
 
 ---
 
