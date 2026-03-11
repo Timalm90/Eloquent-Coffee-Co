@@ -96,6 +96,6 @@ class CountryController extends Controller
                 ->with('error', "Can't remove from database — there are related records.");
         }
 
-        return redirect()->back()->with('success', 'Country and related regions removed.');
+        return redirect()->back()->with('success', 'Country is removed.');
     }
 }
