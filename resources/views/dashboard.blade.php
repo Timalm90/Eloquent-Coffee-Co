@@ -8,6 +8,7 @@
    <link rel="icon" type="image/x-icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)">
    <link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
    <link rel="shortcut icon" href="/favicon-light.ico">
+   <link rel="shortcut icon" href="/favicon-dark.ico">
    <title>Admin - Eloquent Coffee Co</title>
    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -19,11 +20,7 @@
 
       {{-- SUCCESS MESSAGE --}}
       @if (session('success'))
-      <div
-         x-data="{ show: true }"
-         x-show="show"
-         x-transition
-         role="status"
+      <div x-data="{ show: true }" x-show="show" x-transition role="status"
          aria-live="polite"
          class="p-4 rounded-lg bg-green-50 text-green-800 border border-green-200 max-w-7xl mx-auto mt-6 px-6">
          <div class="flex justify-between items-center">
@@ -35,12 +32,7 @@
 
       {{-- ERROR MESSAGE --}}
       @if (session('error'))
-      <div
-         x-data="{ show: true }"
-         x-show="show"
-         x-transition
-         role="alert"
-         aria-live="assertive"
+      <div x-data="{ show: true }" x-show="show" x-transition role="alert" aria-live="assertive"
          class="p-4 rounded-lg bg-red-50 text-red-800 border border-red-200 max-w-7xl mx-auto mt-6 px-6">
          <div class="flex justify-between items-center">
             <span class="text-sm font-medium"><strong>Error:</strong> {{ session('error') }}</span>
@@ -51,8 +43,7 @@
 
       {{-- INVENTORY VALIDATION ERROR --}}
       @if ($errors->has('new_count'))
-      <div
-         role="alert"
+      <div role="alert"
          class="p-4 rounded-lg bg-red-50 text-red-800 border border-red-200 max-w-7xl mx-auto mt-6 px-6">
          <span class="text-sm font-medium"><strong>Error:</strong> {{ $errors->first('new_count') }}</span>
       </div>
@@ -61,7 +52,6 @@
       @php
       $productErrorFields = ['name', 'country_id', 'region_id', 'roast_id', 'type_id', 'price', 'inventory'];
       $dataErrorFields = ['country', 'regions', 'regions.*', 'region', 'roast', 'type', 'category'];
-
       $hasProductErrors = collect($productErrorFields)->some(fn($field) => $errors->has($field));
       $hasDataErrors = collect($dataErrorFields)->some(fn($field) => $errors->has($field));
       @endphp
@@ -81,24 +71,15 @@
 
             {{-- ACTION BUTTONS --}}
             <div class="flex gap-3 mb-8" role="toolbar" aria-label="Dashboard actions">
-               <button
-                  @click="openAddModal = true"
-                  aria-haspopup="dialog"
-                  aria-controls="modal-add-product"
+               <button @click="openAddModal = true" aria-haspopup="dialog" aria-controls="modal-add-product"
                   class="px-5 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                   + Add Product
                </button>
-               <button
-                  @click="openAddDataModal = true"
-                  aria-haspopup="dialog"
-                  aria-controls="modal-add-data"
+               <button @click="openAddDataModal = true" aria-haspopup="dialog" aria-controls="modal-add-data"
                   class="px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 transition-colors duration-200">
                   Add Data
                </button>
-               <button
-                  @click="openRemoveDataModal = true"
-                  aria-haspopup="dialog"
-                  aria-controls="modal-remove-data"
+               <button @click="openRemoveDataModal = true" aria-haspopup="dialog" aria-controls="modal-remove-data"
                   class="px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 transition-colors duration-200">
                   Remove Data
                </button>
@@ -110,16 +91,11 @@
                   <div class="flex gap-3 items-center">
                      <div class="flex-1">
                         <label for="dashboard-search" class="sr-only">Search products</label>
-                        <input
-                           id="dashboard-search"
-                           type="search"
-                           name="search"
-                           value="{{ request('search') }}"
+                        <input id="dashboard-search" type="search" name="search" value="{{ request('search') }}"
                            placeholder="Search products..."
                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent" />
                      </div>
-                     <button
-                        type="submit"
+                     <button type="submit"
                         class="px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                         Search
                      </button>
@@ -162,7 +138,8 @@
                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Type</th>
                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Price</th>
                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Inventory</th>
-                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Add Stock</th>
+                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Delete</th>
                      </tr>
                   </thead>
 
@@ -181,57 +158,54 @@
                               @csrf
                               @method('PUT')
                               <label for="price-{{ $product->id }}" class="sr-only">Price for {{ $product->name }}</label>
-                              <input
-                                 id="price-{{ $product->id }}"
-                                 type="number" step="0.01" name="price" value="{{ $product->price }}"
-                                 class="border border-gray-300 rounded-lg px-2 py-1.5 w-24 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                              <input id="price-{{ $product->id }}" type="number" step="1" name="price" value="{{ $product->price }}"
+                                 class="border border-gray-300 rounded-lg px-2 py-1.5 w-16 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
                               <button class="px-3 py-1.5 bg-gray-800 hover:bg-gray-900 text-white text-xs font-medium rounded-lg transition-colors duration-200">Save</button>
                            </form>
                         </td>
 
-                        {{-- INVENTORY --}}
+                        {{-- INVENTORY (set with inline edit) --}}
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                           <div x-data="{ edit: false }">
+                              <div class="flex items-center gap-2">
+                                 <span x-show="!edit">{{ $product->inventory }}</span>
+                                 <form x-show="edit" method="POST" action="{{ route('admin.products.inventory.set', $product) }}" class="flex gap-2 items-center" aria-label="Set inventory for {{ $product->name }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <label for="set-count-{{ $product->id }}" class="sr-only">Set inventory for {{ $product->name }}</label>
+                                    <input id="set-count-{{ $product->id }}" type="number" min="0" name="new_count"
+                                       value="{{ $product->inventory }}"
+                                       class="border border-gray-300 rounded-lg px-2 py-1.5 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                                    <button class="px-3 py-1.5 bg-gray-800 hover:bg-gray-900 text-white text-xs font-medium rounded-lg transition-colors duration-200">Set</button>
+                                 </form>
+                                 <button @click="edit = !edit"
+                                    class="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 transition-colors duration-200"
+                                    x-text="edit ? 'Cancel' : 'Edit'">
+                                 </button>
+                              </div>
+                           </div>
+                        </td>
+
+                        {{-- ADD STOCK --}}
                         <td class="px-4 py-3">
-                           <div class="text-xs text-gray-500 mb-2">Registered: <span class="font-semibold text-gray-700">{{ $product->inventory }}</span></div>
-                           <form method="POST" action="{{ route('admin.products.inventory.set', $product) }}" class="flex gap-2 items-center" aria-label="Set inventory for {{ $product->name }}">
+                           <form method="POST" action="{{ route('dashboard.addInventory', $product) }}" class="flex gap-2 items-center" aria-label="Add stock for {{ $product->name }}">
                               @csrf
-                              @method('PUT')
-                              <label for="inventory-{{ $product->id }}" class="sr-only">Actual inventory count for {{ $product->name }}</label>
-                              <input
-                                 id="inventory-{{ $product->id }}"
-                                 type="number" min="0" name="new_count" placeholder="Actual"
-                                 class="border border-gray-300 rounded-lg px-2 py-1.5 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400" required>
-                              <button class="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium rounded-lg border border-gray-300 transition-colors duration-200">Set</button>
+                              <label for="incoming-{{ $product->id }}" class="sr-only">Add stock for {{ $product->name }}</label>
+                              <input id="incoming-{{ $product->id }}" type="number" name="incoming" min="1" placeholder="Qty"
+                                 class="border border-gray-300 rounded-lg px-2 py-1.5 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                              <button class="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium rounded-lg border border-gray-300 transition-colors duration-200">Add</button>
                            </form>
                         </td>
 
-                        {{-- ACTIONS --}}
-                        <td class="px-4 py-3">
-                           <form method="POST" action="{{ route('dashboard.addInventory', $product) }}" class="flex gap-2 items-center mb-2" aria-label="Add inventory for {{ $product->name }}">
-                              @csrf
-                              <label for="incoming-{{ $product->id }}" class="sr-only">Incoming quantity for {{ $product->name }}</label>
-                              <input
-                                 id="incoming-{{ $product->id }}"
-                                 type="number" name="incoming" placeholder="Qty"
-                                 class="border border-gray-300 rounded-lg px-2 py-1.5 w-14 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
-                              <button class="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-medium rounded-lg border border-gray-300 transition-colors duration-200">Add</button>
-                           </form>
-
-                           <button
-                              @click="confirmDelete = true"
-                              aria-haspopup="dialog"
-                              :aria-expanded="confirmDelete.toString()"
-                              class="px-3 py-1.5 bg-white hover:bg-red-50 text-red-600 text-xs font-medium rounded-lg border border-red-200 hover:border-red-300 transition-colors duration-200">
+                        {{-- DELETE --}}
+                        <td class="px-4 py-3 text-center">
+                           <button @click="confirmDelete = true"
+                              class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg">
                               Delete
                            </button>
 
                            {{-- DELETE CONFIRM DIALOG --}}
-                           <div
-                              x-cloak
-                              x-show="confirmDelete"
-                              role="dialog"
-                              aria-modal="true"
-                              aria-labelledby="delete-title-{{ $product->id }}"
-                              aria-describedby="delete-desc-{{ $product->id }}"
+                           <div x-cloak x-show="confirmDelete" role="dialog" aria-modal="true" aria-labelledby="delete-title-{{ $product->id }}" aria-describedby="delete-desc-{{ $product->id }}"
                               class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
                               <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
                                  <h3 id="delete-title-{{ $product->id }}" class="font-semibold text-gray-900 mb-1">Delete product?</h3>
