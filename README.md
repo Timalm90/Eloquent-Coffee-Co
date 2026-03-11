@@ -1,5 +1,8 @@
 # Eloquent Coffee Co
 
+<p align="center">
+  <img src="public/images/logos/banner.png" alt="Eloquent Coffee Co" width="100%">
+</p>
 A Laravel-based admin and storefront application for managing a coffee product catalogue — including inventory, pricing, origins, roasts, and types.
 
 ---
