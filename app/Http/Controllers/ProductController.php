@@ -29,10 +29,10 @@ class ProductController extends Controller
         }
         $products = $query->paginate(12)->withQueryString();
 
-        $roasts = Roast::all();
-        $types = Type::all();
-        $countries = Origin::all();
-        $countries = Origin::whereHas('products')->get();
+        $roasts = Roast::orderBy('roast', 'asc')->get();
+        $types = Type::orderBy('type', 'asc')->get();
+        // Only include countries that have products, ordered alphabetically
+        $countries = Origin::whereHas('products')->orderBy('country', 'asc')->get();
 
         if ($request->ajax()) {
             return view('partials.products_grid', compact('products'))->render();
