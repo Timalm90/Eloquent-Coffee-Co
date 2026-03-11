@@ -41,22 +41,31 @@ class DatabaseController extends Controller
 
         return view('dashboard', [
             'products' => $products,
-            'countries' => Origin::all(),
-            'regions' => Region::all(),
+            'countries' => Origin::orderBy('country', 'asc')->get(),
+            // 'countries' => Origin::all(),
+            'regions' => Region::orderBy('region', 'asc')->get(),
+            // 'regions' => Region::all(),
             'suffixes' => Suffix::all(),
-            'roasts' => Roast::all(),
-            'types' => Type::all(),
+            'roasts' => Roast::orderBy('roast', 'asc')->get(),
+            // 'roasts' => Roast::all(),
+            // 'types' => Type::all(),
+            'types' => Type::orderBy('type', 'asc')->get(),
         ]);
     }
 
     public function create()
     {
         return view('dashboard.products.create', [
-            'countries' => Origin::all(),
-            'regions' => Region::all(),
+            'countries' => Origin::orderBy('country', 'asc')->get(),
+            // 'countries' => Origin::all(),
+            'regions' => Region::orderBy('region', 'asc')->get(),
+            // 'regions' => Region::all(),
             'suffixes' => Suffix::all(),
-            'roasts' => Roast::all(),
-            'types' => Type::all(),
+            // 'roasts' => Roast::all(),
+            // 'types' => Type::all(),
+            'roasts' => Roast::orderBy('roast', 'asc')->get(),
+            'types' => Type::orderBy('type', 'asc')->get(),
+
         ]);
     }
 
@@ -91,11 +100,16 @@ class DatabaseController extends Controller
     {
         return view('dashboard.products.edit', [
             'product' => $product,
-            'countries' => Origin::all(),
-            'regions' => Region::all(),
+            'countries' => Origin::orderBy('country', 'asc')->get(),
+            // 'countries' => Origin::all(),
+            'regions' => Region::orderBy('region', 'asc')->get(),
+            // 'regions' => Region::all(),
             'suffixes' => Suffix::all(),
-            'roasts' => Roast::all(),
-            'types' => Type::all(),
+            // 'roasts' => Roast::all(),
+            // 'types' => Type::all(),
+
+            'roasts' => Roast::orderBy('roast', 'asc')->get(),
+            'types' => Type::orderBy('type', 'asc')->get(),
         ]);
     }
 
@@ -129,7 +143,7 @@ class DatabaseController extends Controller
 
     public function regionsByCountry($countryId)
     {
-        $regions = Region::where('country_id', $countryId)->get();
+        $regions = Region::where('country_id', $countryId)->orderBy('region', 'asc')->get();
         return response()->json($regions);
     }
 
