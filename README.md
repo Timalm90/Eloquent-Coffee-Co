@@ -1,10 +1,9 @@
 # Eloquent Coffee Co
 
-```{=html}
+
 <p align="center">
-```
-`<img src="public/images/logos/banner.png" alt="Eloquent Coffee Co" width="100%">`{=html}
-```{=html}
+<img src="public/images/logos/banner.png" alt="Eloquent Coffee Co" width="100%">
+
 </p>
 ```
 A Laravel-based admin and storefront application for managing a coffee
