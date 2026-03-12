@@ -8,7 +8,6 @@
    <link rel="icon" type="image/x-icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)">
    <link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
    <link rel="shortcut icon" href="/favicon-light.ico">
-   <link rel="shortcut icon" href="/favicon-dark.ico">
    <title>Admin - Eloquent Coffee Co</title>
    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
