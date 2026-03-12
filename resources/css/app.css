@@ -4,6 +4,7 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@custom-variant dark (&:where(.dark, .dark *));
 
 
 @theme {
@@ -14,6 +15,19 @@
 
     --font-afacad:
         "Afacad", sans-serif;
+}
+
+:root {
+    color-scheme: light;
+}
+
+html {
+    background-color: rgb(249 250 251); 
+    color-scheme: light;
+}
+
+html, body {
+    background-color: rgb(249 250 251);
 }
 
 body {
@@ -97,6 +111,11 @@ input {
 
 [x-cloak] {
     display: none !important;
+}
+
+select, input {
+    color: #111;
+    background-color: #fff;
 }
 
 /* Modals must always sit above the fixed navbar */
