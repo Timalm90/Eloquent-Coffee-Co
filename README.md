@@ -150,8 +150,6 @@ The application will be available at:
 
 ## Default Admin Credentials
 
-  Field      Value
-  ---------- --------------
   Username   `admin`
   Password   `coffeebean`
 
