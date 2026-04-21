@@ -1,9 +1,15 @@
-# Eloquent Coffee Co
+<h1 align="center">
+Eloquent Coffee Co
+</h1>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?logo=laravel&logoColor=white">
+  <img src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white">
+</p>
 
 <p align="center">
 <img src="public/images/logos/banner.png" alt="Eloquent Coffee Co" width="100%">
-
 </p>
 
 A Laravel-based admin and storefront application for managing a coffee
